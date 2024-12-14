@@ -78,21 +78,44 @@ document.addEventListener("click", function (event) {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
+  addDefaultAccount();
   checkLoginStatus();
 });
+
+function addDefaultAccount() {
+  const defaultUser = {
+    email: "test@gmail.com",
+    password: "test",
+    firstName: "Test",
+    lastName: "User",
+    address: "123 Test St",
+    city: "Test City",
+    zipcode: "12345",
+    favorites: [],
+    cart: []
+  };
+
+  let users = getFromLocalStorage("users") || [];
+  const userExists = users.some(user => user.email === defaultUser.email);
+
+  if (!userExists) {
+    users.push(defaultUser);
+    saveToLocalStorage("users", users);
+  }
+}
 
 function checkLoginStatus() {
   const loggedInUser = getFromLocalStorage("loggedInUser");
   if (loggedInUser) {
-    document.querySelector(".user-dropdown li:nth-child(1)").style.display = "none"; // Schowaj "ZALOGUJ"
-    document.querySelector(".user-dropdown li:nth-child(2)").style.display = "none"; // Schowaj "ZAREJESTRUJ"
-    document.querySelector(".user-dropdown li:nth-child(3)").style.display = "block"; // Pokaż "PROFIL"
-    document.querySelector(".user-dropdown li:nth-child(4)").style.display = "block"; // Pokaż "WYLOGUJ"
+    document.querySelector(".user-dropdown li:nth-child(1)").style.display = "none"; // Hide "ZALOGUJ"
+    document.querySelector(".user-dropdown li:nth-child(2)").style.display = "none"; // Hide "ZAREJESTRUJ"
+    document.querySelector(".user-dropdown li:nth-child(3)").style.display = "block"; // Show "PROFIL"
+    document.querySelector(".user-dropdown li:nth-child(4)").style.display = "block"; // Show "WYLOGUJ"
   } else {
-    document.querySelector(".user-dropdown li:nth-child(1)").style.display = "block"; // Pokaż "ZALOGUJ"
-    document.querySelector(".user-dropdown li:nth-child(2)").style.display = "block"; // Pokaż "ZAREJESTRUJ"
-    document.querySelector(".user-dropdown li:nth-child(3)").style.display = "none"; // Schowaj "PROFIL"
-    document.querySelector(".user-dropdown li:nth-child(4)").style.display = "none"; // Schowaj "WYLOGUJ"
+    document.querySelector(".user-dropdown li:nth-child(1)").style.display = "block"; // Show "ZALOGUJ"
+    document.querySelector(".user-dropdown li:nth-child(2)").style.display = "block"; // Show "ZAREJESTRUJ"
+    document.querySelector(".user-dropdown li:nth-child(3)").style.display = "none"; // Hide "PROFIL"
+    document.querySelector(".user-dropdown li:nth-child(4)").style.display = "none"; // Hide "WYLOGUJ"
   }
 }
 
@@ -144,13 +167,13 @@ document.getElementById("register-form").addEventListener("submit", function (ev
 
   alert("Registration successful!");
   document.getElementById("register-popup").style.display = "none";
-  checkLoginStatus();
+  checkLoginStatus(); 
 });
 
 document.getElementById("logout").addEventListener("click", function () {
   localStorage.removeItem("loggedInUser");
   alert("Logout successful!");
-  checkLoginStatus();
+  checkLoginStatus(); 
 });
 
 function saveToLocalStorage(key, data) {
