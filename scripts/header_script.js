@@ -1,4 +1,7 @@
 // Pobranie elementów
+addDefaultAccount();
+checkLoginStatus();
+// Pobranie elementów
 const userIcon = document.querySelector(".user-icon");
 const userDropdown = document.querySelector(".user-dropdown");
 const loginPopup = document.getElementById("login-popup");
