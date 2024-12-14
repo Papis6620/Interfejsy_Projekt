@@ -98,7 +98,10 @@ function addDefaultAccount() {
       { name: "Sukienka", price: 150, id: 1 },
       { name: "Buty", price: 200, id: 2 }
     ],
-    cart: [],
+    cart: [
+      { name: "Sukienka", price: 150, quantity: 1 },
+      { name: "Buty", price: 200, quantity: 2 }
+    ],
     orderHistory: [
       {
         id: 1,
@@ -183,7 +186,7 @@ document.getElementById("register-form").addEventListener("submit", function (ev
     address,
     city,
     zipcode,
-    favorites: [],
+    watchlist: [],
     cart: [],
     orderHistory: []
   };

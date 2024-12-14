@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const orderHistoryContent = document.getElementById("order-history-content");
     const loggedInUser = getFromLocalStorage("loggedInUser");
   
-    if (loggedInUser && loggedInUser.orderHistory) {
+    if (loggedInUser && loggedInUser.orderHistory.length > 0) {
       orderHistoryContent.innerHTML = loggedInUser.orderHistory.map(order => `
         <div class="order">
           <h3>Zamówienie #${order.id}</h3>
@@ -75,8 +75,16 @@ document.addEventListener("DOMContentLoaded", function () {
     updatedUser.city = document.getElementById("city").value;
     updatedUser.zipcode = document.getElementById("zipcode").value;
   
-    localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
-    alert("Dane zostały zapisane!");
+    let users = getFromLocalStorage("users") || [];
+    const userIndex = users.findIndex(user => user.email === updatedUser.email);
+    if (userIndex !== -1) {
+      users[userIndex] = updatedUser;
+      saveToLocalStorage("users", users);
+    }
+  
+    // Save the updated user to loggedInUser
+    saveToLocalStorage("loggedInUser", updatedUser);
+    alert("Zmiany zostały zapisane!");
   });
 
   function loadAccountSettings() {
@@ -97,12 +105,21 @@ document.addEventListener("DOMContentLoaded", function () {
     updatedUser.lastName = document.getElementById("last-name").value;
     updatedUser.password = document.getElementById("password").value;
   
-    localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+    // Update the user in the users array
+    let users = getFromLocalStorage("users") || [];
+    const userIndex = users.findIndex(user => user.email === updatedUser.email);
+    if (userIndex !== -1) {
+      users[userIndex] = updatedUser;
+      saveToLocalStorage("users", users);
+    }
+  
+    // Save the updated user to loggedInUser
+    saveToLocalStorage("loggedInUser", updatedUser);
     alert("Zmiany zostały zapisane!");
   });
 
   function loadWatchlist() {
-    const watchlistContent = document.getElementById("watchlist");
+    const watchlistContent = document.getElementById("watchlist-content");
     const loggedInUser = getFromLocalStorage("loggedInUser");
   
     if (loggedInUser && loggedInUser.watchlist && loggedInUser.watchlist.length > 0) {
