@@ -91,8 +91,31 @@ function addDefaultAccount() {
     address: "123 Test St",
     city: "Test City",
     zipcode: "12345",
-    favorites: [],
-    cart: []
+    watchlist: [
+      { name: "Sukienka", price: 150, id: 1 },
+      { name: "Buty", price: 200, id: 2 }
+    ],
+    cart: [],
+    orderHistory: [
+      {
+        id: 1,
+        date: "2023-01-01",
+        amount: 100,
+        items: [
+          { name: "Sukienka", quantity: 1 },
+          { name: "Buty", quantity: 2 }
+        ]
+      },
+      {
+        id: 2,
+        date: "2023-01-01",
+        amount: 200,
+        items: [
+          { name: "Sukienka", quantity: 2 },
+          { name: "Buty", quantity: 3 }
+        ]
+      }
+    ]
   };
 
   let users = getFromLocalStorage("users") || [];
@@ -131,8 +154,8 @@ document.getElementById("login-form").addEventListener("submit", function (event
   if (user) {
     saveToLocalStorage("loggedInUser", user);
     alert("Login successful!");
-    document.getElementById("login-popup").style.display = "none";
     checkLoginStatus();
+    document.getElementById("login-popup").style.display = "none";
   } else {
     alert("Invalid email or password!");
   }
@@ -158,7 +181,8 @@ document.getElementById("register-form").addEventListener("submit", function (ev
     city,
     zipcode,
     favorites: [],
-    cart: []
+    cart: [],
+    orderHistory: []
   };
 
   let users = getFromLocalStorage("users") || [];
@@ -173,7 +197,17 @@ document.getElementById("register-form").addEventListener("submit", function (ev
 document.getElementById("logout").addEventListener("click", function () {
   localStorage.removeItem("loggedInUser");
   alert("Logout successful!");
+  window.location.href = "index.html";
   checkLoginStatus(); 
+});
+
+document.getElementById("profile").addEventListener("click", function () {
+  const loggedInUser = getFromLocalStorage("loggedInUser");
+    if (!loggedInUser) {
+      alert("Musisz być zalogowany, aby uzyskać dostęp do tej strony.");
+    }else{
+      window.location.href = "profile.html"; 
+    } 
 });
 
 function saveToLocalStorage(key, data) {
