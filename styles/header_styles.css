@@ -13,7 +13,7 @@ body {
   margin: 0;
   font-family: "Arial", sans-serif;
   color: var(--background-color);
-  height: 100vh; /* Wysokość okna przeglądarki */
+  height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -28,12 +28,17 @@ body {
 }
 
 /* Logo */
-.logo img {
+header .logo img {
   max-height: 60px; /* Dostosowanie wysokości obrazu */
   width: auto; /* Szerokość automatyczna, aby zachować proporcje */
+  transition: transform 0.2s ease; /* Dodanie animacji tła i powiększenia */
 }
 
-.nav .menu {
+header .logo img:hover {
+  transform: scale(1.05); /* Powiększenie obrazu po najechaniu */
+}
+
+header .nav .menu {
   list-style: none;
   display: flex;
   gap: 30px;
@@ -41,7 +46,7 @@ body {
   padding: 0;
 }
 
-.menu-item {
+header .menu-item {
   position: relative;
   padding: 10px 20px;
   border-radius: 20px 20px 0 0; /* Zaokrąglenie tylko na górze */
@@ -49,22 +54,22 @@ body {
   color: var(--text-color);
 }
 
-.menu-item a {
+header .menu-item a {
   text-decoration: none;
   color: var(--text-color);
   font-size: 30px;
 }
 
-.menu-item:hover {
+header .menu-item:hover {
   background-color: var(--hover-background-color);
 }
 
-.menu-item:hover > a {
+header .menu-item:hover > a {
   font-weight: bold; /* Pogrubienie tekstu po najechaniu */
 }
 
 /* Animacja dla dropdown menu */
-.dropdown-menu {
+header .dropdown-menu {
   display: flex;
   opacity: 0; /* Ukrycie początkowe */
   transform: translateY(-20px); /* Początkowa pozycja */
@@ -81,20 +86,20 @@ body {
   pointer-events: none; /* Aby dropdown nie blokował interakcji, gdy jest ukryty */
 }
 
-.dropdown-menu hr {
+header .dropdown-menu hr {
   border: 0;
   border-top: 1px solid var(--text-color); /* Kolor linii */
   margin: 0 0; /* Odstęp nad i pod linią */
 }
 
-.menu-item:hover .dropdown-menu {
+header .menu-item:hover .dropdown-menu {
   opacity: 1; /* Widoczność */
   transform: translateY(0); /* Powrót do początkowej pozycji */
   pointer-events: auto; /* Aktywacja interakcji */
 }
 
 /* Układ kolumn w dropdown menu */
-.dropdown-menu .menu-column {
+header .dropdown-menu .menu-column {
   display: flex;
   flex-direction: column;
   gap: 15px; /* Zwiększenie odstępów między kategoriami */
@@ -102,7 +107,7 @@ body {
   flex-grow: 1; /* Sprawia, że kolumny mogą się rozszerzać, aby wypełnić dostępną przestrzeń */
 }
 
-.dropdown-menu h3 {
+header .dropdown-menu h3 {
   margin-top: 0;
   margin-bottom: 10px;
   font-size: 18px; /* Zwiększenie rozmiaru czcionki */
@@ -110,26 +115,26 @@ body {
   font-weight: bold;
 }
 
-.dropdown-menu ul {
+header .dropdown-menu ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.dropdown-menu li {
+header .dropdown-menu li {
   margin-bottom: 8px; /* Zwiększenie odstępu */
   font-size: 16px; /* Zwiększenie rozmiaru czcionki */
   transition: transform 0.3s ease; /* Animacja dla unoszenia */
 }
 
 /* Efekt unoszenia dla elementów w dropdown */
-.dropdown-menu li:hover {
+header .dropdown-menu li:hover {
   color: var(--hover-text-color);
   font-weight: bold;
   transform: translateY(-2px); /* Uniesienie elementu */
 }
 
-.icons {
+header .icons {
   display: flex;
   color: var(--text-color);
   align-items: center; /* Wyrównanie ikon w pionie */
@@ -139,31 +144,31 @@ body {
 }
 
 /* Styl dla linków */
-.icons a {
+header .icons a {
   padding: 5px;
   text-decoration: none; /* Usunięcie podkreślenia */
   color: inherit; /* Zachowanie domyślnego koloru */
 }
 
-.icons a:hover {
+header .icons a:hover {
   color: var(--hover-text-color);
   transform: scale(1.05);
 }
 
 /* Dla stanu aktywnego (kliknięty link) */
-.icons a:active,
-.icons a:focus {
+header .icons a:active,
+header .icons a:focus {
   outline: none; /* Usunięcie obramowania */
   color: inherit; /* Zachowanie koloru ikony */
 }
 
 /* Usunięcie stylu dla odwiedzonego linku */
-.icons a:visited {
+header .icons a:visited {
   color: inherit;
 }
 
 /* Stylowanie dla ikony użytkownika */
-.user-icon {
+header .user-icon {
   position: relative;
   cursor: pointer;
   padding: 5px;
@@ -172,19 +177,19 @@ body {
 }
 
 /* Efekt kliknięcia dla ikony użytkownika - zmiana tła */
-.user-icon.active {
+header .user-icon.active {
   background-color: var(
     --hover-background-color
   ); /* Kolor tła przy kliknięciu */
 }
 
-.user-icon:hover {
+header .user-icon:hover {
   transform: scale(1.05); /* Powiększenie ikony po kliknięciu */
   color: var(--hover-text-color);
 }
 
 /* Stylowanie dla dropdown menu użytkownika */
-.user-dropdown {
+header .user-dropdown {
   display: flex;
   opacity: 0; /* Ukrycie początkowe */
   transform: translateY(-20px); /* Początkowa pozycja */
@@ -202,42 +207,42 @@ body {
 }
 
 /* Listy w menu */
-.user-dropdown ul {
+header .user-dropdown ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
 /* Stylowanie dla pozycji menu */
-.user-dropdown li {
+header .user-dropdown li {
   margin-bottom: 8px;
   font-size: 16px;
   transition: transform 0.2s ease; /* Animacja dla unoszenia */
 }
 
 /* Efekt unoszenia dla pozycji menu */
-.user-dropdown li:hover {
+header .user-dropdown li:hover {
   color: var(--hover-text-color);
   font-weight: bold;
   transform: translateY(-2px);
 }
 
 /* Pokazanie dropdown menu po kliknięciu na ikonę użytkownika */
-.user-icon.active .user-dropdown {
+header .user-icon.active .user-dropdown {
   opacity: 1; /* Pokazanie menu */
   transform: translateY(0); /* Powrót do pozycji docelowej */
   pointer-events: auto; /* Umożliwienie interakcji */
 }
 
 /* Minimalistyczny pasek wyszukiwania obok kategorii DZIECKO */
-.search-bar {
+header .search-bar {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-left: 20px; /* Odstęp od kategorii DZIECKO */
 }
 
-.search-bar input {
+header .search-bar input {
   border: none;
   border-bottom: 3px solid var(--text-color); /* Kreska zamiast ramki */
   background-color: transparent;
@@ -248,7 +253,7 @@ body {
   width: 300px; /* Szerokość pola wyszukiwania */
 }
 
-.search-bar button {
+header .search-bar button {
   background: transparent;
   border: none;
   cursor: pointer;
@@ -257,13 +262,13 @@ body {
   transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.search-bar button:hover {
+header .search-bar button:hover {
   color: var(--hover-text-color); /* Zmiana koloru przy najechaniu */
   transform: translateY(-2px);
 }
 
 /* Ustawienie pozycji wyszukiwania obok kategorii DZIECKO */
-.nav .menu-item:last-child {
+header .nav .menu-item:last-child {
   display: flex;
   align-items: center;
 }
@@ -282,7 +287,7 @@ body {
   z-index: 1000;
 }
 
-.popup-content {
+.popup .popup-content {
   background-color: var(--header-color);
   color: var(--text-color);
   padding: 20px;
@@ -295,7 +300,7 @@ body {
   flex-direction: column; /* Ustawienie układu kolumnowego */
 }
 
-.close-btn {
+.popup .close-btn {
   background: none;
   border: none;
   font-size: 24px;
@@ -306,24 +311,24 @@ body {
   right: 10px;
 }
 
-h2 {
+.popup h2 {
   text-align: center;
   margin-bottom: 20px;
 }
 
 /* Style dla formularza */
-form {
+.popup form {
   display: flex;
   flex-direction: column;
   width: 100%; /* Ustawienie szerokości formularza na 100% */
 }
 
-label {
+.popup label {
   margin: 10px 0 5px;
   font-weight: bold;
 }
 
-input {
+.popup input {
   padding: 10px;
   margin-bottom: 15px;
   border: none;
@@ -334,7 +339,7 @@ input {
   box-sizing: border-box; /* Umożliwia prawidłowe obliczanie szerokości */
 }
 
-button[type="submit"] {
+.popup button[type="submit"] {
   padding: 10px;
   background-color: var(--input-color);
   color: var(--text-color);
@@ -344,13 +349,13 @@ button[type="submit"] {
   cursor: pointer;
 }
 
-button[type="submit"]:hover {
+.popup button[type="submit"]:hover {
   font-weight: bold;
   background-color: var(--hover-background-color);
 }
 
 /* Kontener hasła */
-.password-container {
+.popup .password-container {
   position: relative;
 }
 
@@ -358,6 +363,12 @@ button[type="submit"]:hover {
 #login-popup:target,
 #register-popup:target {
   display: flex;
+}
+
+#middle-part {
+  display: flex; /* Ustawia Flexbox jako model układu */
+  flex-wrap: wrap; /* Pozwala na zawijanie elementów do nowej linii, jeśli nie mieszczą się w szerokości */
+  box-sizing: border-box; /* Zapobiega przekraczaniu szerokości przez padding */
 }
 
 .cart-icon {
@@ -374,3 +385,4 @@ button[type="submit"]:hover {
   padding: 2px 6px;
   font-size: 12px;
 }
+
