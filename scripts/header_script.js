@@ -199,27 +199,6 @@ document
 document.getElementById("register-form").addEventListener("submit", function (event) {
   event.preventDefault();
 
-  const email = document.getElementById("register-email").value;
-  const password = document.getElementById("register-password").value;
-  const firstName = document.getElementById("register-first-name").value;
-  const lastName = document.getElementById("register-last-name").value;
-  const address = document.getElementById("register-address").value;
-  const city = document.getElementById("register-city").value;
-  const zipcode = document.getElementById("register-zipcode").value;
-
-  const user = {
-    email,
-    password,
-    firstName,
-    lastName,
-    address,
-    city,
-    zipcode,
-    watchlist: [],
-    cart: [],
-    orderHistory: []
-  };
-
     const email = document.getElementById("register-email").value;
     const password = document.getElementById("register-password").value;
     const firstName = document.getElementById("register-first-name").value;
