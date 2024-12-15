@@ -1,42 +1,72 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const buttons = document.querySelectorAll(".profile-btn");
+  const sections = document.querySelectorAll(".profile-section");
 
-    const buttons = document.querySelectorAll(".profile-btn");
-    const sections = document.querySelectorAll(".profile-section");
-  
-    buttons.forEach(button => {
-      button.addEventListener("click", function () {
-        const sectionId = this.getAttribute("data-section");
-    
-        sections.forEach(section => {
-          section.classList.remove("active");
-        });
-    
-        document.getElementById(sectionId).classList.add("active");
-    
-        if (sectionId === "order-history") {
-          loadOrderHistory();
-        } else if (sectionId === "watchlist") {
-          loadWatchlist();
-        } else if (sectionId === "order-details") {
-          loadOrderDetails();
-        } else if (sectionId === "account-settings") {
-          loadAccountSettings();
-        }
-      });
+  buttons.forEach(button => {
+    button.addEventListener("click", function () {
+      const sectionId = this.getAttribute("data-section");
+
+      // Remove 'active' class from all buttons
+      buttons.forEach(btn => btn.classList.remove("active"));
+      // Add 'active' class to the clicked button
+      this.classList.add("active");
+
+      // Hide all sections
+      sections.forEach(section => section.classList.remove("active"));
+
+      // Show the selected section
+      const activeSection = document.getElementById(sectionId);
+      activeSection.classList.add("active");
+
+      // Load corresponding content
+      if (sectionId === "order-history") {
+        loadOrderHistory();
+      } else if (sectionId === "watchlist") {
+        loadWatchlist();
+      } else if (sectionId === "order-details") {
+        loadOrderDetails();
+      } else if (sectionId === "account-settings") {
+        loadAccountSettings();
+      }
     });
-  
-    // Display the first section by default
-    if (sections.length > 0) {
-      sections[0].classList.add("active");
-      loadOrderHistory(); // Load order history if the first section is order history
+  });
+
+  // Get the hash from the URL
+  const hash = window.location.hash.substring(1);
+  let activeSectionId = hash || sections[0].id;
+
+  // Set the active button and section
+  buttons.forEach(btn => {
+    if (btn.getAttribute("data-section") === activeSectionId) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
     }
   });
+
+  sections.forEach(section => {
+    section.classList.remove("active");
+    if (section.id === activeSectionId) {
+      section.classList.add("active");
+      // Load the corresponding content
+      if (activeSectionId === "order-history") {
+        loadOrderHistory();
+      } else if (activeSectionId === "watchlist") {
+        loadWatchlist();
+      } else if (activeSectionId === "order-details") {
+        loadOrderDetails();
+      } else if (activeSectionId === "account-settings") {
+        loadAccountSettings();
+      }
+    }
+  });
+});
   
   function loadOrderHistory() {
     const orderHistoryContent = document.getElementById("order-history-content");
     const loggedInUser = getFromLocalStorage("loggedInUser");
   
-    if (loggedInUser && loggedInUser.orderHistory) {
+    if (loggedInUser && loggedInUser.orderHistory.length > 0) {
       orderHistoryContent.innerHTML = loggedInUser.orderHistory.map(order => `
         <div class="order">
           <h3>Zamówienie #${order.id}</h3>
@@ -75,8 +105,16 @@ document.addEventListener("DOMContentLoaded", function () {
     updatedUser.city = document.getElementById("city").value;
     updatedUser.zipcode = document.getElementById("zipcode").value;
   
-    localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
-    alert("Dane zostały zapisane!");
+    let users = getFromLocalStorage("users") || [];
+    const userIndex = users.findIndex(user => user.email === updatedUser.email);
+    if (userIndex !== -1) {
+      users[userIndex] = updatedUser;
+      saveToLocalStorage("users", users);
+    }
+  
+    // Save the updated user to loggedInUser
+    saveToLocalStorage("loggedInUser", updatedUser);
+    alert("Zmiany zostały zapisane!");
   });
 
   function loadAccountSettings() {
@@ -97,12 +135,21 @@ document.addEventListener("DOMContentLoaded", function () {
     updatedUser.lastName = document.getElementById("last-name").value;
     updatedUser.password = document.getElementById("password").value;
   
-    localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+    // Update the user in the users array
+    let users = getFromLocalStorage("users") || [];
+    const userIndex = users.findIndex(user => user.email === updatedUser.email);
+    if (userIndex !== -1) {
+      users[userIndex] = updatedUser;
+      saveToLocalStorage("users", users);
+    }
+  
+    // Save the updated user to loggedInUser
+    saveToLocalStorage("loggedInUser", updatedUser);
     alert("Zmiany zostały zapisane!");
   });
 
   function loadWatchlist() {
-    const watchlistContent = document.getElementById("watchlist");
+    const watchlistContent = document.getElementById("watchlist-content");
     const loggedInUser = getFromLocalStorage("loggedInUser");
   
     if (loggedInUser && loggedInUser.watchlist && loggedInUser.watchlist.length > 0) {

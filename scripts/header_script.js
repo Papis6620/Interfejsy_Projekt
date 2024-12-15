@@ -1,6 +1,7 @@
 // Pobranie elementów
 addDefaultAccount();
 checkLoginStatus();
+updateCartCount();
 // Pobranie elementów
 const userIcon = document.querySelector(".user-icon");
 const userDropdown = document.querySelector(".user-dropdown");
@@ -83,7 +84,23 @@ document.addEventListener("click", function (event) {
 document.addEventListener("DOMContentLoaded", function () {
   addDefaultAccount();
   checkLoginStatus();
+  updateCartCount()
 });
+
+function updateCartCount() {
+  const cartCountElement = document.querySelector(".cart-count");
+  const loggedInUser = getFromLocalStorage("loggedInUser");
+  let count = 0;
+  if (loggedInUser && loggedInUser.cart) {
+    count = loggedInUser.cart.reduce((total, item) => total + item.quantity, 0);
+  }
+  if(count === 0){
+    cartCountElement.style.display = "none";
+  }else{
+    cartCountElement.textContent = count;
+    cartCountElement.style.display = "block";
+  }
+}
 
 function addDefaultAccount() {
   const defaultUser = {
@@ -98,7 +115,10 @@ function addDefaultAccount() {
       { name: "Sukienka", price: 150, id: 1 },
       { name: "Buty", price: 200, id: 2 },
     ],
-    cart: [],
+    cart: [
+      { name: "Sukienka", price: 150, quantity: 1 },
+      { name: "Buty", price: 200, quantity: 2 }
+    ],
     orderHistory: [
       {
         id: 1,
@@ -165,21 +185,40 @@ document
     const user = users.find(
       (user) => user.email === email && user.password === password
     );
+  if (user) {
+    saveToLocalStorage("loggedInUser", user);
+    alert("Login successful!");
+    checkLoginStatus();
+    document.getElementById("login-popup").style.display = "none";
+    updateCartCount()
+  } else {
+    alert("Invalid email or password!");
+  }
+});
 
-    if (user) {
-      saveToLocalStorage("loggedInUser", user);
-      alert("Login successful!");
-      checkLoginStatus();
-      document.getElementById("login-popup").style.display = "none";
-    } else {
-      alert("Invalid email or password!");
-    }
-  });
+document.getElementById("register-form").addEventListener("submit", function (event) {
+  event.preventDefault();
 
-document
-  .getElementById("register-form")
-  .addEventListener("submit", function (event) {
-    event.preventDefault();
+  const email = document.getElementById("register-email").value;
+  const password = document.getElementById("register-password").value;
+  const firstName = document.getElementById("register-first-name").value;
+  const lastName = document.getElementById("register-last-name").value;
+  const address = document.getElementById("register-address").value;
+  const city = document.getElementById("register-city").value;
+  const zipcode = document.getElementById("register-zipcode").value;
+
+  const user = {
+    email,
+    password,
+    firstName,
+    lastName,
+    address,
+    city,
+    zipcode,
+    watchlist: [],
+    cart: [],
+    orderHistory: []
+  };
 
     const email = document.getElementById("register-email").value;
     const password = document.getElementById("register-password").value;

@@ -370,3 +370,19 @@ header .nav .menu-item:last-child {
   flex-wrap: wrap; /* Pozwala na zawijanie elementów do nowej linii, jeśli nie mieszczą się w szerokości */
   box-sizing: border-box; /* Zapobiega przekraczaniu szerokości przez padding */
 }
+
+.cart-icon {
+  position: relative;
+}
+
+.cart-icon .cart-count {
+  position: absolute;
+  top: 70%;
+  right: 5%;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+

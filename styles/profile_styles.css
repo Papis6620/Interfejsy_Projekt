@@ -27,6 +27,11 @@
   .profile-btn:hover {
     background-color: var(--hover-background-color);
   }
+
+  .profile-btn.active {
+    background-color: var(--hover-background-color);
+    font-weight: bold;
+  }
   
   .profile-content {
     width: 80%;
