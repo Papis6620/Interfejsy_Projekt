@@ -215,7 +215,7 @@ document.getElementById("register-form").addEventListener("submit", function (ev
       address,
       city,
       zipcode,
-      favorites: [],
+      watchlist: [],
       cart: [],
       orderHistory: [],
     };
