@@ -1,4 +1,22 @@
 /* Stopka */
+:root {
+  --input-color: #faf3eb;
+  --header-color: #d2bca6;
+  --background-color: #a28f7b; /* Główny kolor (np. zielony) */
+  --hover-text-color: black;
+  --hover-background-color: #b4a492;
+  --text-color: #3c2c1e;
+}
+
+body {
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  color: var(--background-color);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 footer {
   background-color: var(--header-color);
   padding: 20px;

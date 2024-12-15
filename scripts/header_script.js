@@ -96,7 +96,7 @@ function addDefaultAccount() {
     zipcode: "12345",
     watchlist: [
       { name: "Sukienka", price: 150, id: 1 },
-      { name: "Buty", price: 200, id: 2 }
+      { name: "Buty", price: 200, id: 2 },
     ],
     cart: [],
     orderHistory: [
@@ -106,8 +106,8 @@ function addDefaultAccount() {
         amount: 100,
         items: [
           { name: "Sukienka", quantity: 1 },
-          { name: "Buty", quantity: 2 }
-        ]
+          { name: "Buty", quantity: 2 },
+        ],
       },
       {
         id: 2,
@@ -115,14 +115,14 @@ function addDefaultAccount() {
         amount: 200,
         items: [
           { name: "Sukienka", quantity: 2 },
-          { name: "Buty", quantity: 3 }
-        ]
-      }
-    ]
+          { name: "Buty", quantity: 3 },
+        ],
+      },
+    ],
   };
 
   let users = getFromLocalStorage("users") || [];
-  const userExists = users.some(user => user.email === defaultUser.email);
+  const userExists = users.some((user) => user.email === defaultUser.email);
 
   if (!userExists) {
     users.push(defaultUser);
@@ -133,84 +133,98 @@ function addDefaultAccount() {
 function checkLoginStatus() {
   const loggedInUser = getFromLocalStorage("loggedInUser");
   if (loggedInUser) {
-    document.querySelector(".user-dropdown li:nth-child(1)").style.display = "none"; // Hide "ZALOGUJ"
-    document.querySelector(".user-dropdown li:nth-child(2)").style.display = "none"; // Hide "ZAREJESTRUJ"
-    document.querySelector(".user-dropdown li:nth-child(3)").style.display = "block"; // Show "PROFIL"
-    document.querySelector(".user-dropdown li:nth-child(4)").style.display = "block"; // Show "WYLOGUJ"
+    document.querySelector(".user-dropdown li:nth-child(1)").style.display =
+      "none"; // Hide "ZALOGUJ"
+    document.querySelector(".user-dropdown li:nth-child(2)").style.display =
+      "none"; // Hide "ZAREJESTRUJ"
+    document.querySelector(".user-dropdown li:nth-child(3)").style.display =
+      "block"; // Show "PROFIL"
+    document.querySelector(".user-dropdown li:nth-child(4)").style.display =
+      "block"; // Show "WYLOGUJ"
   } else {
-    document.querySelector(".user-dropdown li:nth-child(1)").style.display = "block"; // Show "ZALOGUJ"
-    document.querySelector(".user-dropdown li:nth-child(2)").style.display = "block"; // Show "ZAREJESTRUJ"
-    document.querySelector(".user-dropdown li:nth-child(3)").style.display = "none"; // Hide "PROFIL"
-    document.querySelector(".user-dropdown li:nth-child(4)").style.display = "none"; // Hide "WYLOGUJ"
+    document.querySelector(".user-dropdown li:nth-child(1)").style.display =
+      "block"; // Show "ZALOGUJ"
+    document.querySelector(".user-dropdown li:nth-child(2)").style.display =
+      "block"; // Show "ZAREJESTRUJ"
+    document.querySelector(".user-dropdown li:nth-child(3)").style.display =
+      "none"; // Hide "PROFIL"
+    document.querySelector(".user-dropdown li:nth-child(4)").style.display =
+      "none"; // Hide "WYLOGUJ"
   }
 }
 
-document.getElementById("login-form").addEventListener("submit", function (event) {
-  event.preventDefault();
+document
+  .getElementById("login-form")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
 
-  const email = document.getElementById("login-email").value;
-  const password = document.getElementById("login-password").value;
+    const email = document.getElementById("login-email").value;
+    const password = document.getElementById("login-password").value;
 
-  const users = getFromLocalStorage("users") || [];
-  const user = users.find(user => user.email === email && user.password === password);
+    const users = getFromLocalStorage("users") || [];
+    const user = users.find(
+      (user) => user.email === email && user.password === password
+    );
 
-  if (user) {
-    saveToLocalStorage("loggedInUser", user);
-    alert("Login successful!");
+    if (user) {
+      saveToLocalStorage("loggedInUser", user);
+      alert("Login successful!");
+      checkLoginStatus();
+      document.getElementById("login-popup").style.display = "none";
+    } else {
+      alert("Invalid email or password!");
+    }
+  });
+
+document
+  .getElementById("register-form")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const email = document.getElementById("register-email").value;
+    const password = document.getElementById("register-password").value;
+    const firstName = document.getElementById("register-first-name").value;
+    const lastName = document.getElementById("register-last-name").value;
+    const address = document.getElementById("register-address").value;
+    const city = document.getElementById("register-city").value;
+    const zipcode = document.getElementById("register-zipcode").value;
+
+    const user = {
+      email,
+      password,
+      firstName,
+      lastName,
+      address,
+      city,
+      zipcode,
+      favorites: [],
+      cart: [],
+      orderHistory: [],
+    };
+
+    let users = getFromLocalStorage("users") || [];
+    users.push(user);
+    saveToLocalStorage("users", users);
+
+    alert("Registration successful!");
+    document.getElementById("register-popup").style.display = "none";
     checkLoginStatus();
-    document.getElementById("login-popup").style.display = "none";
-  } else {
-    alert("Invalid email or password!");
-  }
-});
-
-document.getElementById("register-form").addEventListener("submit", function (event) {
-  event.preventDefault();
-
-  const email = document.getElementById("register-email").value;
-  const password = document.getElementById("register-password").value;
-  const firstName = document.getElementById("register-first-name").value;
-  const lastName = document.getElementById("register-last-name").value;
-  const address = document.getElementById("register-address").value;
-  const city = document.getElementById("register-city").value;
-  const zipcode = document.getElementById("register-zipcode").value;
-
-  const user = {
-    email,
-    password,
-    firstName,
-    lastName,
-    address,
-    city,
-    zipcode,
-    favorites: [],
-    cart: [],
-    orderHistory: []
-  };
-
-  let users = getFromLocalStorage("users") || [];
-  users.push(user);
-  saveToLocalStorage("users", users);
-
-  alert("Registration successful!");
-  document.getElementById("register-popup").style.display = "none";
-  checkLoginStatus(); 
-});
+  });
 
 document.getElementById("logout").addEventListener("click", function () {
   localStorage.removeItem("loggedInUser");
   alert("Logout successful!");
   window.location.href = "index.html";
-  checkLoginStatus(); 
+  checkLoginStatus();
 });
 
 document.getElementById("profile").addEventListener("click", function () {
   const loggedInUser = getFromLocalStorage("loggedInUser");
-    if (!loggedInUser) {
-      alert("Musisz być zalogowany, aby uzyskać dostęp do tej strony.");
-    }else{
-      window.location.href = "profile.html"; 
-    } 
+  if (!loggedInUser) {
+    alert("Musisz być zalogowany, aby uzyskać dostęp do tej strony.");
+  } else {
+    window.location.href = "profile.html";
+  }
 });
 
 function saveToLocalStorage(key, data) {
@@ -221,3 +235,102 @@ function getFromLocalStorage(key) {
   const data = localStorage.getItem(key);
   return data ? JSON.parse(data) : null;
 }
+
+//budowanie header
+// FUNKCJA DO BUDOWANIA MENU W NAGLOWKU
+function buildMenu(data) {
+  // Znajdź element <ul> o klasie "menu" wewnątrz elementu z klasą "header"
+  const menu = document.querySelector(".header ul.menu");
+
+  if (!menu) {
+    console.error(
+      "Nie znaleziono elementu <ul> z klasą 'menu' wewnątrz '.header'."
+    );
+    return;
+  }
+
+  // Iteracja przez kategorie
+  Object.keys(data).forEach((category) => {
+    const menuItem = document.createElement("li");
+    menuItem.className = "menu-item dropdown";
+
+    const link = document.createElement("a");
+    link.href = "#";
+    link.textContent = category.toUpperCase();
+
+    const dropdown = document.createElement("div");
+    dropdown.className = "dropdown-menu";
+
+    // Tworzenie kolumn dla podkategorii
+    Object.keys(data[category]).forEach((subCategory) => {
+      const column = document.createElement("div");
+      column.className = "menu-column";
+
+      const heading = document.createElement("h3");
+      heading.textContent = subCategory;
+
+      const hr = document.createElement("hr");
+      const list = document.createElement("ul");
+
+      // Dodawanie elementów listy
+      data[category][subCategory].forEach((item) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = item;
+        list.appendChild(listItem);
+      });
+
+      column.appendChild(heading);
+      column.appendChild(hr);
+      column.appendChild(list);
+      dropdown.appendChild(column);
+    });
+
+    menuItem.appendChild(link);
+    menuItem.appendChild(dropdown);
+    menu.appendChild(menuItem);
+  });
+}
+
+// Funkcja do załadowania danych z pliku JSON i przekształcenia ich do odpowiedniej struktury
+function loadCategoryData() {
+  console.log("Ładowanie danych...");
+  return fetch("../jsons/categoryData.json")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Błąd ładowania danych");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      // Struktura docelowa
+      const transformedData = {
+        ona: {},
+        on: {},
+        dziecko: {},
+      };
+
+      // Konwersja danych
+      Object.keys(data).forEach((category) => {
+        Object.keys(data[category]).forEach((subCategory) => {
+          // Ustawienie danych w odpowiedniej kategorii
+          transformedData[category][subCategory] = data[category][subCategory];
+        });
+      });
+
+      // Zwrócenie przekształconych danych
+      return transformedData;
+    })
+    .catch((error) => {
+      console.error("Błąd:", error);
+      return null; // Jeśli wystąpił błąd, zwróci null
+    });
+}
+
+// Wywołanie funkcji po załadowaniu strony
+loadCategoryData().then((categoryData) => {
+  if (categoryData) {
+    buildMenu(categoryData);
+  } else {
+    console.log("Błąd w ładowaniu lub przekształcaniu danych");
+  }
+});
