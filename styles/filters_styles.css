@@ -111,10 +111,12 @@
 .price-slider input {
   position: absolute;
   pointer-events: none;
-  -webkit-appearance: none;
+  -webkit-appearance: none; /* WebKit */
+  -moz-appearance: none; /* Firefox */
   appearance: none;
   height: 3px;
   background: black;
+  width: 100%; /* Ustawienie szerokości dla większej kompatybilności */
 }
 
 .price-slider input[type="range"]:nth-child(1) {
@@ -124,6 +126,28 @@
 .price-slider input::-webkit-slider-thumb {
   pointer-events: auto;
   -webkit-appearance: none;
+  appearance: none;
+  background: black;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.price-slider input::-moz-range-thumb {
+  pointer-events: auto;
+  -moz-appearance: none; /* Firefox */
+  appearance: none;
+  background: black;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.price-slider input::-ms-thumb {
+  pointer-events: auto;
+  -ms-appearance: none; /* Internet Explorer/Edge */
   appearance: none;
   background: black;
   width: 12px;
