@@ -1,6 +1,7 @@
 // Pobranie elementów
 addDefaultAccount();
 checkLoginStatus();
+updateCartCount();
 // Pobranie elementów
 const userIcon = document.querySelector(".user-icon");
 const userDropdown = document.querySelector(".user-dropdown");
@@ -83,7 +84,23 @@ document.addEventListener("click", function (event) {
 document.addEventListener("DOMContentLoaded", function () {
   addDefaultAccount();
   checkLoginStatus();
+  updateCartCount()
 });
+
+function updateCartCount() {
+  const cartCountElement = document.querySelector(".cart-count");
+  const loggedInUser = getFromLocalStorage("loggedInUser");
+  let count = 0;
+  if (loggedInUser && loggedInUser.cart) {
+    count = loggedInUser.cart.reduce((total, item) => total + item.quantity, 0);
+  }
+  if(count === 0){
+    cartCountElement.style.display = "none";
+  }else{
+    cartCountElement.textContent = count;
+    cartCountElement.style.display = "block";
+  }
+}
 
 function addDefaultAccount() {
   const defaultUser = {
@@ -162,6 +179,7 @@ document.getElementById("login-form").addEventListener("submit", function (event
     alert("Login successful!");
     checkLoginStatus();
     document.getElementById("login-popup").style.display = "none";
+    updateCartCount()
   } else {
     alert("Invalid email or password!");
   }

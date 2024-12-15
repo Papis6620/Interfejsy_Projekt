@@ -1,36 +1,66 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const buttons = document.querySelectorAll(".profile-btn");
+  const sections = document.querySelectorAll(".profile-section");
 
-    const buttons = document.querySelectorAll(".profile-btn");
-    const sections = document.querySelectorAll(".profile-section");
-  
-    buttons.forEach(button => {
-      button.addEventListener("click", function () {
-        const sectionId = this.getAttribute("data-section");
-    
-        sections.forEach(section => {
-          section.classList.remove("active");
-        });
-    
-        document.getElementById(sectionId).classList.add("active");
-    
-        if (sectionId === "order-history") {
-          loadOrderHistory();
-        } else if (sectionId === "watchlist") {
-          loadWatchlist();
-        } else if (sectionId === "order-details") {
-          loadOrderDetails();
-        } else if (sectionId === "account-settings") {
-          loadAccountSettings();
-        }
-      });
+  buttons.forEach(button => {
+    button.addEventListener("click", function () {
+      const sectionId = this.getAttribute("data-section");
+
+      // Remove 'active' class from all buttons
+      buttons.forEach(btn => btn.classList.remove("active"));
+      // Add 'active' class to the clicked button
+      this.classList.add("active");
+
+      // Hide all sections
+      sections.forEach(section => section.classList.remove("active"));
+
+      // Show the selected section
+      const activeSection = document.getElementById(sectionId);
+      activeSection.classList.add("active");
+
+      // Load corresponding content
+      if (sectionId === "order-history") {
+        loadOrderHistory();
+      } else if (sectionId === "watchlist") {
+        loadWatchlist();
+      } else if (sectionId === "order-details") {
+        loadOrderDetails();
+      } else if (sectionId === "account-settings") {
+        loadAccountSettings();
+      }
     });
-  
-    // Display the first section by default
-    if (sections.length > 0) {
-      sections[0].classList.add("active");
-      loadOrderHistory(); // Load order history if the first section is order history
+  });
+
+  // Get the hash from the URL
+  const hash = window.location.hash.substring(1);
+  let activeSectionId = hash || sections[0].id;
+
+  // Set the active button and section
+  buttons.forEach(btn => {
+    if (btn.getAttribute("data-section") === activeSectionId) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
     }
   });
+
+  sections.forEach(section => {
+    section.classList.remove("active");
+    if (section.id === activeSectionId) {
+      section.classList.add("active");
+      // Load the corresponding content
+      if (activeSectionId === "order-history") {
+        loadOrderHistory();
+      } else if (activeSectionId === "watchlist") {
+        loadWatchlist();
+      } else if (activeSectionId === "order-details") {
+        loadOrderDetails();
+      } else if (activeSectionId === "account-settings") {
+        loadAccountSettings();
+      }
+    }
+  });
+});
   
   function loadOrderHistory() {
     const orderHistoryContent = document.getElementById("order-history-content");
