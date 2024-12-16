@@ -50,6 +50,7 @@ main {
 
 /* Kafelek produktu */
 .product-tile {
+  position: relative;
   box-sizing: border-box;
   height: 400px;
   width: 250px;
@@ -62,6 +63,12 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.product-tile .product-link {
+  display: block; /* Umożliwia działanie linku w całym obszarze, ale zachowuje układ */
+  text-decoration: none; /* Usuwa podkreślenie linku */
+  color: inherit; /* Zapobiega zmianie koloru tekstu na domyślny kolor linku */
 }
 
 .product-content {
