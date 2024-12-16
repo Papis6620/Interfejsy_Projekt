@@ -50,13 +50,12 @@ main {
 
 /* Kafelek produktu */
 .product-tile {
+  color: #333;
   position: relative;
   box-sizing: border-box;
-  height: 400px;
-  width: 250px;
   background-color: white;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 20px;
   overflow: visible;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
@@ -75,7 +74,6 @@ main {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .product-tile:hover {
@@ -85,19 +83,19 @@ main {
 /* Styl dla obrazka produktu */
 .product-image {
   margin: 0 auto;
-  height: 50%;
+  height: 250px;
   transition: transform 0.3s ease; /* Umożliwia płynne powiększenie obrazka */
 }
 
 .product-info {
-  padding: 10px;
+  padding: 30px;
+  padding-top: 0;
 }
 
 .product-name {
   font-size: 18px;
   font-weight: bold;
   margin: 10px 0;
-  color: #333;
 }
 
 .product-price {
@@ -115,10 +113,11 @@ main {
   font-weight: bold;
 }
 
-.color-options {
-  display: flex;
+.colors {
   gap: 10px;
   margin-top: 5px;
+  overflow-x: auto; /* Pozwala na przewijanie poziome */
+  white-space: nowrap; /* Zapobiega zawijaniu elementów w nowy wiersz */
 }
 
 .color-option {
