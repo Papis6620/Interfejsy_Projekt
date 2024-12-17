@@ -29,7 +29,15 @@ body {
   cursor: pointer;
 }
 
+.add-to-watchlist .fa-regular {
+  display: block;
+}
+
 .add-to-watchlist .fa-solid {
+  display: none;
+}
+
+.add-to-watchlist:hover .fa-regular {
   display: none;
 }
 
@@ -37,7 +45,19 @@ body {
   display: block;
 }
 
-.add-to-watchlist:hover .fa-regular {
+.add-to-watchlist.added .fa-regular {
+  display: none;
+}
+
+.add-to-watchlist.added .fa-solid {
+  display: block;
+}
+
+.add-to-watchlist.added:hover .fa-regular {
+  display: block;
+}
+
+.add-to-watchlist.added:hover .fa-solid {
   display: none;
 }
 
@@ -150,6 +170,11 @@ body {
   scale: 1.2;
 }
 
+.size.selected {
+  background-color: #333;
+  color: #fff;
+}
+
 .size.unavailable {
   color: #bbb;
   border-color: #ddd;
@@ -169,6 +194,11 @@ body {
 
 .color:hover {
   scale: 1.5;
+}
+
+.color.selected {
+  border: 2px solid #000;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .color.black {
@@ -236,6 +266,10 @@ body {
   background-color: #ccc;
 }
 
+.quantity span {
+  font-size: 16px;
+  font-weight: bold;
+}
 .quantity span {
   font-size: 16px;
   font-weight: bold;
