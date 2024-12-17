@@ -225,12 +225,11 @@ function handleAddToWatchlist() {
 function initializeWatchlistButton() {
   const loggedInUser = getFromLocalStorage("loggedInUser");
   const addToWatchlistButton = document.querySelector(".add-to-watchlist");
-  const productCode = document.getElementById("product-code").textContent;
 
   // Sprawdzamy, czy użytkownik jest zalogowany i czy produkt znajduje się na liście obserwowanych
   if (loggedInUser && loggedInUser.watchlist) {
     const isProductInWatchlist = loggedInUser.watchlist.some(
-      (item) => item.id === productCode
+      (item) => item.id === productID
     );
 
     if (isProductInWatchlist) {
