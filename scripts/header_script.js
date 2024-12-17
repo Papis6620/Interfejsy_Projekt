@@ -87,6 +87,28 @@ document.addEventListener("DOMContentLoaded", function () {
   updateCartCount()
 });
 
+// Funkcja do obsługi wyszukiwania
+document.getElementById("search-button").addEventListener("click", function () {
+  const searchInput = document.getElementById("search-input").value.trim();
+  if (searchInput) {
+    window.location.href = `searching.html?q=${encodeURIComponent(searchInput)}`;
+  } else {
+    alert("Wprowadź frazę do wyszukiwania.");
+  }
+});
+
+// Obsługuje wyszukiwanie po wciśnięciu klawisza Enter
+document.getElementById("search-input").addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    const searchInput = document.getElementById("search-input").value.trim();
+    if (searchInput) {
+      window.location.href = `searching.html?q=${encodeURIComponent(searchInput)}`;
+    } else {
+      alert("Wprowadź frazę do wyszukiwania.");
+    }
+  }
+});
+
 function updateCartCount() {
   const cartCountElement = document.querySelector(".cart-count");
   const loggedInUser = getFromLocalStorage("loggedInUser");
