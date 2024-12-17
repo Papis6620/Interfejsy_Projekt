@@ -153,14 +153,43 @@ document.addEventListener("DOMContentLoaded", function () {
     const loggedInUser = getFromLocalStorage("loggedInUser");
   
     if (loggedInUser && loggedInUser.watchlist && loggedInUser.watchlist.length > 0) {
-      watchlistContent.innerHTML = loggedInUser.watchlist.map(item => `
-        <div class="watchlist-item">
-          <h3>${item.name}</h3>
-          <p>Cena: ${item.price} PLN</p>
+      watchlistContent.innerHTML = `
+        <div id="tiles">
+          ${loggedInUser.watchlist.map(item => `
+            <a href="./product.html?id=${item.id}" class="product-link">
+              <div class="product-tile">
+                <div class="product-content">
+                  <img src="../img/products/product${item.id}/product1.png" alt="${item.name}" class="product-image">
+                  <div class="product-info">
+                    <h3 class="product-name">${item.name}</h3>
+                    <p class="product-price">${item.price} zł</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          `).join('')}
         </div>
-      `).join('');
+      `;
+      updateLastInRow();
     } else {
       watchlistContent.innerHTML = "<p>Brak produktów na liście obserwowanych.</p>";
     }
+  }
+  
+  function updateLastInRow() {
+    const tiles = document.querySelectorAll("#tiles .product-tile");
+    const container = document.getElementById("tiles");
+  
+    const columns = Math.floor(container.offsetWidth / 270);
+  
+    tiles.forEach((tile) => {
+      tile.classList.remove("last-product-in-row");
+    });
+  
+    tiles.forEach((tile, index) => {
+      if ((index + 1) % columns === 0) {
+        tile.classList.add("last-product-in-row");
+      }
+    });
   }
   

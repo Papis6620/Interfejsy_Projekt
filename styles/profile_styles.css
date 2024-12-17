@@ -5,7 +5,7 @@
   
   .profile-sidebar {
     width: 20%;
-    background-color: var(--header-color);
+    background-color: #b6a390;
     padding: 20px;
     box-sizing: border-box;
   }
@@ -25,11 +25,11 @@
   }
   
   .profile-btn:hover {
-    background-color: var(--hover-background-color);
+    background-color: #a08f7f;
   }
 
   .profile-btn.active {
-    background-color: var(--hover-background-color);
+    background-color: #a08f7f;
     font-weight: bold;
   }
   
@@ -72,3 +72,72 @@ button[type="submit"]:hover {
     font-weight: bold;
     background-color: var(--hover-background-color);
   }
+
+a{
+  text-decoration: none;
+  color: black;
+}
+
+#tiles {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+  padding: 20px;
+  flex-grow: 1;
+}
+
+/* Kafelek produktu */
+.product-tile {
+  color: #333;
+  position: relative;
+  box-sizing: border-box;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.product-tile .product-link {
+  display: block; /* Umożliwia działanie linku w całym obszarze, ale zachowuje układ */
+  text-decoration: none; /* Usuwa podkreślenie linku */
+  color: inherit; /* Zapobiega zmianie koloru tekstu na domyślny kolor linku */
+}
+
+.product-content {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-tile:hover {
+  transform: translateY(-5px);
+}
+
+/* Styl dla obrazka produktu */
+.product-image {
+  margin: 0 auto;
+  height: 250px;
+  transition: transform 0.3s ease; /* Umożliwia płynne powiększenie obrazka */
+}
+
+.product-info {
+  padding: 10px;
+}
+
+.product-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #333;
+}
+
+.product-price {
+  font-size: 16px;
+  color: #e60000;
+}

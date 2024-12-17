@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
     loadCart();
+    const checkoutButton = document.getElementById("checkout-button");
+    if (checkoutButton) {
+      checkoutButton.addEventListener("click", proceedToCheckout);
+    }
   });
   
   function loadCart() {
@@ -10,15 +14,38 @@ document.addEventListener("DOMContentLoaded", function () {
     if (loggedInUser && loggedInUser.cart.length > 0) {
       cartItemsContainer.innerHTML = loggedInUser.cart.map((item, index) => `
         <div class="cart-item">
-          <h3>${item.name}</h3>
-          <p>Cena: ${item.price} PLN</p>
-          <p>Ilość: <input type="number" value="${item.quantity}" min="1" data-index="${index}" class="quantity-input"></p>
-          <button data-index="${index}" class="remove-button">Usuń</button>
+          <a href="product.html?id=${item.id}" class="cart-item-link">
+            <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+          </a>
+          <div class="cart-item-info">
+            <a href="product.html?id=${item.id}" class="cart-item-link">
+              <h3>${item.name}</h3>
+            </a>
+            <div class="size-and-color">
+              <!-- Size Display -->
+              <div class="size-container">
+                <div class="sizes">
+                  <span class="size selected">${item.size}</span>
+                </div>
+              </div>
+              <!-- Color Display -->
+              <div class="color-container">
+                <div class="colors">
+                  <span class="color ${item.color} selected"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="cart-item-actions">
+            <p>Cena: ${item.price*item.quantity} zł</p>
+            <p>Ilość: <input type="number" value="${item.quantity}" min="1" data-index="${index}" class="quantity-input"></p>
+            <button data-index="${index}" class="remove-button">Usuń</button>
+          </div>
         </div>
       `).join('');
   
       const total = loggedInUser.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-      cartTotalContainer.innerHTML = `<h2>Łączna kwota: ${total} PLN</h2>`;
+      cartTotalContainer.innerHTML = `<h2>Łączna kwota: ${total} zł</h2>`;
   
       document.querySelectorAll(".quantity-input").forEach(input => {
         input.addEventListener("change", updateQuantity);
@@ -33,6 +60,32 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
   
+  function proceedToCheckout() {
+    const loggedInUser = getFromLocalStorage("loggedInUser");
+    if (loggedInUser && loggedInUser.cart.length > 0) {
+      const newOrder = {
+        id: Date.now(),
+        date: new Date().toLocaleDateString(),
+        amount: loggedInUser.cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
+        items: [...loggedInUser.cart],
+      };
+  
+      loggedInUser.orderHistory = loggedInUser.orderHistory || [];
+      loggedInUser.orderHistory.push(newOrder);
+  
+      loggedInUser.cart = [];
+  
+      saveToLocalStorage("loggedInUser", loggedInUser);
+      updateUsers(loggedInUser);
+      loadCart();
+      updateCartCount();
+  
+      alert("Dziękujemy za zakupy!");
+    } else {
+      alert("Twój koszyk jest pusty.");
+    }
+  }
+
   function updateQuantity(event) {
     const index = event.target.getAttribute("data-index");
     const newQuantity = parseInt(event.target.value);

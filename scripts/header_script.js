@@ -87,6 +87,28 @@ document.addEventListener("DOMContentLoaded", function () {
   updateCartCount()
 });
 
+// Funkcja do obsługi wyszukiwania
+document.getElementById("search-button").addEventListener("click", function () {
+  const searchInput = document.getElementById("search-input").value.trim();
+  if (searchInput) {
+    window.location.href = `searching.html?q=${encodeURIComponent(searchInput)}`;
+  } else {
+    alert("Wprowadź frazę do wyszukiwania.");
+  }
+});
+
+// Obsługuje wyszukiwanie po wciśnięciu klawisza Enter
+document.getElementById("search-input").addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    const searchInput = document.getElementById("search-input").value.trim();
+    if (searchInput) {
+      window.location.href = `searching.html?q=${encodeURIComponent(searchInput)}`;
+    } else {
+      alert("Wprowadź frazę do wyszukiwania.");
+    }
+  }
+});
+
 function updateCartCount() {
   const cartCountElement = document.querySelector(".cart-count");
   const loggedInUser = getFromLocalStorage("loggedInUser");
@@ -111,34 +133,9 @@ function addDefaultAccount() {
     address: "123 Test St",
     city: "Test City",
     zipcode: "12345",
-    watchlist: [
-      { name: "Sukienka", price: 150, id: 1 },
-      { name: "Buty", price: 200, id: 2 },
-    ],
-    cart: [
-      { name: "Sukienka", price: 150, quantity: 1 },
-      { name: "Buty", price: 200, quantity: 2 }
-    ],
-    orderHistory: [
-      {
-        id: 1,
-        date: "2023-01-01",
-        amount: 100,
-        items: [
-          { name: "Sukienka", quantity: 1 },
-          { name: "Buty", quantity: 2 },
-        ],
-      },
-      {
-        id: 2,
-        date: "2023-01-01",
-        amount: 200,
-        items: [
-          { name: "Sukienka", quantity: 2 },
-          { name: "Buty", quantity: 3 },
-        ],
-      },
-    ],
+    watchlist: [],
+    cart: [],
+    orderHistory: [],
   };
 
   let users = getFromLocalStorage("users") || [];

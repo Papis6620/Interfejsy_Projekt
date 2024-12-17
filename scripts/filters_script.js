@@ -41,9 +41,9 @@ clearBtn.addEventListener("click", function () {
   var minValueDisplay = document.getElementById("min-value");
   var maxValueDisplay = document.getElementById("max-value");
   priceMin.value = priceMin.min;
-  minValueDisplay.textContent = priceMin.min + " PLN";
+  minValueDisplay.textContent = priceMin.min + " zł";
   priceMax.value = priceMax.max;
-  maxValueDisplay.textContent = priceMax.max + " PLN";
+  maxValueDisplay.textContent = priceMax.max + " zł";
 });
 
 // document.addEventListener("DOMContentLoaded", function () {
@@ -54,8 +54,8 @@ clearBtn.addEventListener("click", function () {
 function updatePriceValues() {
   const minValue = Math.min(priceMin.value, priceMax.value);
   const maxValue = Math.max(priceMin.value, priceMax.value);
-  minValueDisplay.textContent = minValue + " PLN";
-  maxValueDisplay.textContent = maxValue + " PLN";
+  minValueDisplay.textContent = minValue + " zł";
+  maxValueDisplay.textContent = maxValue + " zł";
 }
 
 priceMin.addEventListener("input", updatePriceValues);

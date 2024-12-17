@@ -50,13 +50,13 @@ main {
 
 /* Kafelek produktu */
 .product-tile {
+  color: #333;
+  position: relative;
   box-sizing: border-box;
-  height: 400px;
-  width: 250px;
   background-color: white;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: visible;
+  border-radius: 20px;
+  overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
   display: flex;
@@ -64,11 +64,16 @@ main {
   justify-content: space-between;
 }
 
+.product-tile .product-link {
+  display: block; /* Umożliwia działanie linku w całym obszarze, ale zachowuje układ */
+  text-decoration: none; /* Usuwa podkreślenie linku */
+  color: inherit; /* Zapobiega zmianie koloru tekstu na domyślny kolor linku */
+}
+
 .product-content {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
 .product-tile:hover {
@@ -78,7 +83,7 @@ main {
 /* Styl dla obrazka produktu */
 .product-image {
   margin: 0 auto;
-  height: 50%;
+  height: 250px;
   transition: transform 0.3s ease; /* Umożliwia płynne powiększenie obrazka */
 }
 
@@ -148,4 +153,9 @@ main {
 /* Stopka */
 #footer-container {
   z-index: 1000;
+}
+
+a{
+  text-decoration: none;
+  color: black;
 }

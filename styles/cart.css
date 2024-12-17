@@ -29,18 +29,58 @@ main.cart {
 /* Cart Item Styles */
 .cart-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 15px 0;
   border-bottom: 1px solid #e0e0e0;
 }
+
+.cart-item-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.cart-item-info {
+  flex: 1;
+}
+
+.cart-item-info h3 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  color: #343a40;
+}
+
+.size-and-color {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.size-container, .color-container {
+  margin: 0;
+}
+
+.size-container .sizes, .color-container .colors {
+  display: flex;
+}
+
+.cart-item-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.cart-item-actions p {
+  margin: 0;
+}
+
 
 .cart-item h3 {
   margin: 0;
   font-size: 18px;
   color: #343a40;
   width: 30%;
-  border: 1px solid #e0e0e0;
 }
 
 .cart-item p {
@@ -49,7 +89,6 @@ main.cart {
 }
 
 .quantity-input {
-  margin: 0;
   width: 50px;
   padding: 5px;
 }
@@ -64,7 +103,7 @@ main.cart {
 }
 
 .remove-button:hover {
-  background-color: #c82333;
+  background-color: #a71c2a;
 }
 
 /* Cart Total Styles */
@@ -79,8 +118,8 @@ main.cart {
   display: block;
   width: 100%;
   padding: 15px;
-  background-color: #007bff;
-  color: #ffffff;
+  background-color: #704430;
+  color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -90,7 +129,7 @@ main.cart {
 }
 
 #checkout-button:hover {
-  background-color: #0056b3;
+  background-color: #40281e;
 }
 
 #cart-items{
@@ -107,4 +146,71 @@ main.cart {
 
 #footer-container {
   z-index: 1000;
+}
+
+.cart-item-image{
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.size-container,
+.color-container {
+  font-size: large;
+  margin: 15px 0;
+  /* margin-bottom: 20%; */
+}
+
+.sizes,
+.colors {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.size {
+  padding: 8px 12px;
+  border: 1px solid #999;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: background-color 0.3s, color 0.3s, scale 0.3s;
+  background-color: #333;
+  color: #fff;
+}
+
+/* Kolory */
+.color {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  transition: scale 0.3s;
+  border: 2px solid #000;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.color.black {
+  background-color: #000;
+}
+.color.blue {
+  background-color: #33a8ff;
+}
+.color.red {
+  background-color: #ff4b4b;
+}
+.color.purple {
+  background-color: #8a33ff;
+}
+.color.gray {
+  background-color: #888;
+}
+
+img{
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.cart-item-link{
+  text-decoration: none;
+  color: black;
 }
