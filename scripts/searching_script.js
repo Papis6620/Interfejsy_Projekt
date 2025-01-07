@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const productColor = document.createElement("div");
       productColor.className = "product-color";
       const colorLabel = document.createElement("label");
-      colorLabel.textContent = "Color:";
+      colorLabel.textContent = "Kolor:";
       productColor.appendChild(colorLabel);
   
       const colorOptions = document.createElement("div");

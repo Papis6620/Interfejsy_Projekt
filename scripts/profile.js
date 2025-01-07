@@ -170,7 +170,6 @@ document.addEventListener("DOMContentLoaded", function () {
           `).join('')}
         </div>
       `;
-      updateLastInRow();
     } else {
       watchlistContent.innerHTML = "<p>Brak produktów na liście obserwowanych.</p>";
     }

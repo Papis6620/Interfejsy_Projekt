@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function loadCart() {
     const cartItemsContainer = document.getElementById("cart-items");
     const cartTotalContainer = document.getElementById("cart-total");
+    const checkoutButton = document.getElementById("checkout-button");
+    const cartSummary = document.getElementById("cart-summary");
     const loggedInUser = getFromLocalStorage("loggedInUser");
   
     if (loggedInUser && loggedInUser.cart.length > 0) {
@@ -31,24 +33,29 @@ document.addEventListener("DOMContentLoaded", function () {
               <!-- Color Display -->
               <div class="color-container">
                 <div class="colors">
-                  <span class="color ${item.color} selected"></span>
+                  <span class="color selected" style="background-color: ${item.color};"></span>
                 </div>
               </div>
             </div>
           </div>
           <div class="cart-item-actions">
-            <p>Cena: ${item.price*item.quantity} zł</p>
-            <p>Ilość: <input type="number" value="${item.quantity}" min="1" data-index="${index}" class="quantity-input"></p>
+            <p class="price">${(item.price*item.quantity).toFixed(2)} zł</p>
+            
+            <div class="quantity">
+                <button>-</button>
+                <span class="text">${item.quantity}</span>
+                <button>+</button>
+              </div>
             <button data-index="${index}" class="remove-button">Usuń</button>
           </div>
         </div>
       `).join('');
   
       const total = loggedInUser.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-      cartTotalContainer.innerHTML = `<h2>Łączna kwota: ${total} zł</h2>`;
+      cartTotalContainer.innerHTML = `<h2>Łączna kwota: ${total.toFixed(2)} zł</h2>`;
   
-      document.querySelectorAll(".quantity-input").forEach(input => {
-        input.addEventListener("change", updateQuantity);
+      document.querySelectorAll(".quantity button").forEach(button => {
+        button.addEventListener("click", changeQuantity);
       });
   
       document.querySelectorAll(".remove-button").forEach(button => {
@@ -57,6 +64,9 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       cartItemsContainer.innerHTML = "<p>Twój koszyk jest pusty.</p>";
       cartTotalContainer.innerHTML = "";
+      checkoutButton.style.display = "none";
+      cartSummary.innerHTML = "<p>Dodaj produkty do koszyka, aby kontynuować zakupy.</p>";
+      
     }
   }
   
@@ -66,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const newOrder = {
         id: Date.now(),
         date: new Date().toLocaleDateString(),
-        amount: loggedInUser.cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
+        amount: loggedInUser.cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2),
         items: [...loggedInUser.cart],
       };
   
@@ -86,19 +96,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function updateQuantity(event) {
-    const index = event.target.getAttribute("data-index");
-    const newQuantity = parseInt(event.target.value);
+  function changeQuantity(event) {
+    const index = event.target.parentElement.parentElement.querySelector(".remove-button").getAttribute("data-index");
+    const action = event.target.textContent.trim();
     const loggedInUser = getFromLocalStorage("loggedInUser");
-  
+    
     if (loggedInUser && loggedInUser.cart[index]) {
-      loggedInUser.cart[index].quantity = newQuantity;
-      saveToLocalStorage("loggedInUser", loggedInUser);
-      updateUsers(loggedInUser);
-      loadCart();
-      updateCartCount();
+        if (action === "+") {
+            loggedInUser.cart[index].quantity += 1;
+        } else if (action === "-" && loggedInUser.cart[index].quantity > 1) {
+            loggedInUser.cart[index].quantity -= 1;
+        }
+        saveToLocalStorage("loggedInUser", loggedInUser);
+        updateUsers(loggedInUser);
+        loadCart();
+        updateCartCount();
     }
-  }
+}
   
   function removeItem(event) {
     const index = event.target.getAttribute("data-index");
@@ -140,7 +154,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     if(count === 0){
       cartCountElement.style.display = "none";
-    }else{
+    }else if(count > 99){
+      cartCountElement.textContent = "99+";
+      cartCountElement.style.display = "block";
+    }
+    else{
       cartCountElement.textContent = count;
       cartCountElement.style.display = "block";
     }

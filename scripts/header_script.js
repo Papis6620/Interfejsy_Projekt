@@ -118,7 +118,11 @@ function updateCartCount() {
   }
   if(count === 0){
     cartCountElement.style.display = "none";
-  }else{
+  }else if(count > 99){
+    cartCountElement.textContent = "99+";
+    cartCountElement.style.display = "block";
+  }
+  else{
     cartCountElement.textContent = count;
     cartCountElement.style.display = "block";
   }
