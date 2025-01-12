@@ -366,9 +366,12 @@ header .nav .menu-item:last-child {
 }
 
 #middle-part {
+  margin-left: 40px;
+  margin-right: 40px;
   display: flex; /* Ustawia Flexbox jako model układu */
   flex-wrap: wrap; /* Pozwala na zawijanie elementów do nowej linii, jeśli nie mieszczą się w szerokości */
   box-sizing: border-box; /* Zapobiega przekraczaniu szerokości przez padding */
+  justify-content: center;
 }
 
 .cart-icon {
@@ -385,4 +388,3 @@ header .nav .menu-item:last-child {
   padding: 2px 6px;
   font-size: 12px;
 }
-

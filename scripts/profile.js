@@ -62,25 +62,54 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
   
-  function loadOrderHistory() {
-    const orderHistoryContent = document.getElementById("order-history-content");
-    const loggedInUser = getFromLocalStorage("loggedInUser");
-  
-    if (loggedInUser && loggedInUser.orderHistory.length > 0) {
-      orderHistoryContent.innerHTML = loggedInUser.orderHistory.map(order => `
-        <div class="order">
-          <h3>Zamówienie #${order.id}</h3>
-          <p>Data: ${order.date}</p>
-          <p>Kwota: ${order.amount} PLN</p>
-          <ul>
-            ${order.items.map(item => `<li>${item.name} - ${item.quantity} szt.</li>`).join('')}
-          </ul>
+function loadOrderHistory() {
+  const orderHistoryContent = document.getElementById("order-history-content");
+  const loggedInUser = getFromLocalStorage("loggedInUser");
+
+  if (loggedInUser && loggedInUser.orderHistory.length > 0) {
+    orderHistoryContent.innerHTML = loggedInUser.orderHistory.map(order => `
+      <div class="order">
+        <h3>Zamówienie #${order.id}</h3>
+        <p id="date">Data: ${order.date}</p>
+        <div class="order-items">
+          ${order.items.map(item => `
+            <div class="order-item">
+              <a href="product.html?id=${item.id}" class="cart-item-link">
+                <img src="${item.image}" alt="${item.name}" class="order-item-image">
+              </a>
+              <div class="order-item-details">
+                
+                  <h4 class="order-item-name"><a href="product.html?id=${item.id}" class="cart-item-link">${item.name}</a></h4>
+                
+                <div class="size-and-color">
+                <!-- Size Display -->
+                <div class="size-container">
+                  <div class="sizes">
+                    <span class="size selected">${item.size}</span>
+                  </div>
+                </div>
+                <!-- Color Display -->
+                <div class="color-container">
+                  <div class="colors">
+                    <span class="color selected" style="background-color: ${item.color};"></span>
+                  </div>
+                </div>
+                </div>
+              </div>
+              <div class="order-item-summary">
+                <p class="order-item-quantity">Ilość: ${item.quantity}</p>
+                <p class="order-item-price">Cena: ${(item.price * item.quantity).toFixed(2)} zł</p>
+              </div>
+            </div>
+          `).join('')}
         </div>
-      `).join('');
-    } else {
-      orderHistoryContent.innerHTML = "<p>Brak historii zamówień.</p>";
-    }
+        <p class="order-total">Łączna kwota: ${order.amount} zł</p>
+      </div>
+    `).join('');
+  } else {
+    orderHistoryContent.innerHTML = "<p>Brak historii zamówień.</p>";
   }
+}
   
   function getFromLocalStorage(key) {
     const data = localStorage.getItem(key);
@@ -171,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
       `;
     } else {
-      watchlistContent.innerHTML = "<p>Brak produktów na liście obserwowanych.</p>";
+      watchlistContent.innerHTML = `<p id="watchlist-text">Brak produktów na liście obserwowanych.</p>`;
     }
   }
   
