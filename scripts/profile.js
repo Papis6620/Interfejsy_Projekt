@@ -107,7 +107,7 @@ function loadOrderHistory() {
       </div>
     `).join('');
   } else {
-    orderHistoryContent.innerHTML = "<p>Brak historii zamówień.</p>";
+    orderHistoryContent.innerHTML = `<p id="empty-text">Brak historii zamówień.</p>`;
   }
 }
   

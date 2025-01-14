@@ -47,14 +47,14 @@
     display: block;
   }
 
-input {
+#order-details-form input, #account-settings-form input{
     padding: 10px;
     margin-bottom: 15px;
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 1rem;
-    width: 100%; /* Zapewnia, że inputy będą miały pełną szerokość kontenera */
-    box-sizing: border-box; /* Umożliwia prawidłowe obliczanie szerokości */
+    width: 100%; 
+    box-sizing: border-box; 
   }
   
 button[type="submit"] {
@@ -294,4 +294,8 @@ a{
 label{
   color: black;
   font-weight: bold;
+}
+
+#empty-text{
+  color: black;
 }

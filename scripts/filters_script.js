@@ -1,12 +1,19 @@
 console.log("filters_script.js loaded");
 
+// Select filter elements
 const filterSections = document.querySelectorAll(".filter-section h3");
 const priceMin = document.getElementById("price-min");
 const priceMax = document.getElementById("price-max");
 const minValueDisplay = document.getElementById("min-value");
 const maxValueDisplay = document.getElementById("max-value");
+const clearFiltersBtn = document.getElementById("clear-filters-btn");
+const applyFiltersBtn = document.querySelector(".apply-btn"); // Button for applying filters
+const dynamicCategoryContent = document.getElementById("dynamic-category-content");
 
-// Funkcja do rozwijania/zwijania sekcji
+// Variables to store category data (loaded dynamically)
+let categoryData = {};
+
+// Toggle filter sections
 filterSections.forEach((header) => {
   header.addEventListener("click", () => {
     const section = header.parentElement;
@@ -14,93 +21,53 @@ filterSections.forEach((header) => {
   });
 });
 
-var clearBtn = document.getElementById("clear-filters-btn");
-clearBtn.addEventListener("click", function () {
-  // Odznacz wszystkie checkboxy
-  var checkboxes = document.querySelectorAll(".filter-checkbox");
-  checkboxes.forEach(function (checkbox) {
-    checkbox.checked = false;
-  });
+// Clear all filters and redirect to keep only `q`
+clearFiltersBtn.addEventListener("click", function () {
+  // Retrieve the current `q` parameter
+  const params = new URLSearchParams(window.location.search);
+  const query = params.get("q");
 
-  // Zaznacz opcję "Brak sortowania"
-  var sortRadios = document.querySelectorAll(".filter-radio");
-  sortRadios.forEach(function (radio) {
-    if (radio.nextSibling.textContent.trim() === "Brak sortowania") {
-      radio.checked = true;
-    } else if (radio.nextSibling.textContent.trim() === "Brak preferencji") {
-      radio.checked = true;
-      dynamicCategoryContent.innerHTML = "";
-    } else {
-      radio.checked = false;
-    }
-  });
-
-  // Ustaw zakresy cen na maksymalnie szerokie
-  var priceMin = document.getElementById("price-min");
-  var priceMax = document.getElementById("price-max");
-  var minValueDisplay = document.getElementById("min-value");
-  var maxValueDisplay = document.getElementById("max-value");
-  priceMin.value = priceMin.min;
-  minValueDisplay.textContent = priceMin.min + " zł";
-  priceMax.value = priceMax.max;
-  maxValueDisplay.textContent = priceMax.max + " zł";
+  // Redirect to the `searching.html` page with only the `q` parameter
+  if (query) {
+    window.location.href = `searching.html?q=${query}`;
+  } else {
+    window.location.href = "searching.html"; // Fallback if `q` is missing
+  }
 });
 
-// document.addEventListener("DOMContentLoaded", function () {
-
-// });
-
-// Funkcja do aktualizacji zakresu cen
+// Update price values dynamically
 function updatePriceValues() {
   const minValue = Math.min(priceMin.value, priceMax.value);
   const maxValue = Math.max(priceMin.value, priceMax.value);
-  minValueDisplay.textContent = minValue + " zł";
-  maxValueDisplay.textContent = maxValue + " zł";
+  minValueDisplay.textContent = `${minValue} zł`;
+  maxValueDisplay.textContent = `${maxValue} zł`;
 }
 
 priceMin.addEventListener("input", updatePriceValues);
 priceMax.addEventListener("input", updatePriceValues);
 
-updatePriceValues();
+updatePriceValues(); // Initialize displayed values
 
-// Pobieramy elementy
-const categoryRadios = document.querySelectorAll('input[name="category"]');
-const dynamicCategoryContent = document.getElementById(
-  "dynamic-category-content"
-);
-
-// Dane do wyświetlania checkboxów dla każdej kategorii
-var categoryData = {};
-
+// Load category data from JSON file
 function loadCategoryData() {
-  return fetch("../jsons/categoryData.json") // Ścieżka do pliku JSON
+  return fetch("../jsons/categoryData.json")
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Błąd ładowania danych");
+        throw new Error("Failed to load category data");
       }
       return response.json();
     })
     .then((data) => {
-      categoryData = data; // Przypisanie danych do zmiennej globalnej
+      categoryData = data;
     })
     .catch((error) => {
-      console.error("Błąd:", error);
+      console.error("Error loading category data:", error);
     });
 }
 
-loadCategoryData()
-  .then(() => {
-    console.log("Dane zostały załadowane!");
-    // Możesz teraz wywołać inne funkcje zależne od tych danych
-  })
-  .catch((error) => {
-    console.error("Błąd ładowania danych:", error);
-  });
-console.log("Przekształcone dane categoryData:", categoryData);
-
-// Funkcja generująca dynamiczne checkboxy
+// Dynamically generate category checkboxes
 function generateCategoryContent(category) {
-  dynamicCategoryContent.innerHTML = ""; // Czyścimy zawartość
+  dynamicCategoryContent.innerHTML = ""; // Clear existing content
 
   if (categoryData[category]) {
     Object.keys(categoryData[category]).forEach((section) => {
@@ -117,14 +84,109 @@ function generateCategoryContent(category) {
   }
 }
 
-// Nasłuchiwanie zmian
-categoryRadios.forEach((radio) => {
-  radio.addEventListener("change", (e) => {
-    const selectedCategory = e.target.value;
-    if (selectedCategory === "none") {
-      dynamicCategoryContent.innerHTML = ""; // Brak preferencji - czyścimy
-    } else {
-      generateCategoryContent(selectedCategory);
-    }
+// Load category data and handle category selection
+loadCategoryData().then(() => {
+  console.log("Category data loaded!");
+  const categoryRadios = document.querySelectorAll('input[name="category"]');
+
+  categoryRadios.forEach((radio) => {
+    radio.addEventListener("change", (e) => {
+      const selectedCategory = e.target.value;
+      if (selectedCategory === "none") {
+        dynamicCategoryContent.innerHTML = ""; // Clear content for "Brak preferencji"
+      } else {
+        generateCategoryContent(selectedCategory);
+      }
+    });
   });
 });
+
+// Construct the search URL by appending to the current query
+function constructSearchURL() {
+  const params = new URLSearchParams(window.location.search);
+
+  // Preserve the `q` parameter if it exists, otherwise leave it out
+  const query = params.get("q");
+
+  // Add or update price range in the parameters
+  params.set("priceMin", priceMin.value);
+  params.set("priceMax", priceMax.value);
+
+  // Add or update selected category in the parameters
+  const selectedCategory = document.querySelector('input[name="category"]:checked');
+  if (selectedCategory && selectedCategory.value !== "none") {
+    params.set("category", selectedCategory.value);
+  } else {
+    params.delete("category"); // Remove category if "none" is selected
+  }
+
+  // Add or update selected sort option in the parameters
+  const selectedSort = document.querySelector('input[name="sort"]:checked');
+  if (selectedSort && selectedSort.id !== "no-sort") {
+    params.set("sort", selectedSort.id); // Add the selected sort method to the URL
+  } else {
+    params.delete("sort"); // Remove sort if "Brak sortowania" is selected
+  }
+
+  // Separate colors, sizes, and general filters
+  const selectedCheckboxes = Array.from(document.querySelectorAll(".filter-checkbox:checked"));
+  const colorMap = {
+    "Czerwony": "red",
+    "Niebieski": "blue",
+    "Czarny": "black",
+    "Biały": "white",
+  };
+  const sizeList = ["S", "M", "L", "XL", "XXL"]; // Add all valid sizes here
+
+  const selectedColors = [];
+  const selectedSizes = [];
+  const selectedFilters = [];
+
+  selectedCheckboxes.forEach((checkbox) => {
+    const filterName = checkbox.nextSibling.textContent.trim();
+    const mappedColor = colorMap[filterName];
+
+    if (mappedColor) {
+      selectedColors.push(mappedColor); // Add to colors if it matches a color
+    } else if (sizeList.includes(filterName)) {
+      selectedSizes.push(filterName); // Add to sizes if it matches a valid size
+    } else {
+      selectedFilters.push(filterName); // Otherwise, add to general filters
+    }
+  });
+
+  // Add or update the `colors` parameter
+  if (selectedColors.length > 0) {
+    params.set("colors", selectedColors.join(","));
+  } else {
+    params.delete("colors"); // Remove colors if none are selected
+  }
+
+  // Add or update the `sizes` parameter
+  if (selectedSizes.length > 0) {
+    params.set("sizes", selectedSizes.join(","));
+  } else {
+    params.delete("sizes"); // Remove sizes if none are selected
+  }
+
+  // Add or update the `filters` parameter
+  if (selectedFilters.length > 0) {
+    params.set("filters", selectedFilters.join(","));
+  } else {
+    params.delete("filters"); // Remove filters if none are selected
+  }
+
+  // Construct the new URL with preserved filters
+  let newURL = `searching.html?${params.toString()}`;
+
+  // If `q` parameter doesn't exist, remove it from the URL
+  if (!query) {
+    newURL = `searching.html?${params.toString().replace(/&?q=[^&]*/, "")}`; // Remove `q` if it doesn't exist
+  }
+
+  // Redirect to the new URL
+  window.location.href = newURL;
+}
+
+// Add event listener to the "Apply Filters" button
+applyFiltersBtn.addEventListener("click", constructSearchURL);
