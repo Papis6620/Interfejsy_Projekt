@@ -274,7 +274,7 @@ function buildMenu(data) {
     menuItem.className = "menu-item dropdown";
 
     const link = document.createElement("a");
-    link.href = "#";
+    link.href = `searching.html?category=${encodeURIComponent(category)}`;
     link.textContent = category.toUpperCase();
 
     const dropdown = document.createElement("div");
@@ -295,6 +295,13 @@ function buildMenu(data) {
       data[category][subCategory].forEach((item) => {
         const listItem = document.createElement("li");
         listItem.textContent = item;
+      
+        // Make the listItem clickable
+        listItem.style.cursor = "pointer"; // Add pointer cursor to indicate clickability
+        listItem.onclick = () => {
+          window.location.href = `searching.html?category=${encodeURIComponent(category)}&filters=${encodeURIComponent(item)}`;
+        };
+      
         list.appendChild(listItem);
       });
 
