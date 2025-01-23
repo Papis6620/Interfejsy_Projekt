@@ -71,7 +71,7 @@ body {
 
 /* Stopka */
 #footer-container {
-  z-index: 1000;
+  z-index: 100;
 }
 
 .product-container {

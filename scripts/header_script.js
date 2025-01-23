@@ -28,6 +28,36 @@ userIcon.addEventListener("click", function (event) {
   }
 });
 
+function showPopupMessage(message) {
+  // Utworzenie elementu popupu
+  const messagePopup = document.createElement("div");
+  messagePopup.className = "message-popup";
+
+  // Zawartość popupu
+  const messageContent = `
+    <div class="message-popup-content">
+      <p>${message}</p>
+      <button class="close-popup">OK</button>
+    </div>
+  `;
+
+  messagePopup.innerHTML = messageContent;
+
+  // Dodanie popupu do dokumentu
+  document.body.appendChild(messagePopup);
+
+  // Dodanie obsługi zamykania popupu
+  messagePopup.querySelector(".close-popup").addEventListener("click", () => {
+    document.body.removeChild(messagePopup);
+  });
+}
+
+function validateEmail(email) {
+  // Wyrażenie regularne sprawdzające poprawność e-maila
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 // Funkcja otwierająca popup logowania po kliknięciu "ZALOGUJ"
 document
   .querySelector(".user-dropdown ul li:nth-child(1)")
@@ -153,87 +183,118 @@ function addDefaultAccount() {
 
 function checkLoginStatus() {
   const loggedInUser = getFromLocalStorage("loggedInUser");
+  const userIconElement = document.querySelector(".user-icon i");
+
   if (loggedInUser) {
-    document.querySelector(".user-dropdown li:nth-child(1)").style.display =
-      "none"; // Hide "ZALOGUJ"
-    document.querySelector(".user-dropdown li:nth-child(2)").style.display =
-      "none"; // Hide "ZAREJESTRUJ"
-    document.querySelector(".user-dropdown li:nth-child(3)").style.display =
-      "block"; // Show "PROFIL"
-    document.querySelector(".user-dropdown li:nth-child(4)").style.display =
-      "block"; // Show "WYLOGUJ"
+    // Hide default icon and show first letter
+    userIconElement.classList.remove("fa-circle-user");
+    userIconElement.classList.add("letter");
+
+    userIconElement.textContent = loggedInUser.firstName[0].toUpperCase();
+
+    document.querySelector(".user-dropdown li:nth-child(1)").style.display = "none";
+    document.querySelector(".user-dropdown li:nth-child(2)").style.display = "none";
+    document.querySelector(".user-dropdown li:nth-child(3)").style.display = "block";
+    document.querySelector(".user-dropdown li:nth-child(4)").style.display = "block";
   } else {
-    document.querySelector(".user-dropdown li:nth-child(1)").style.display =
-      "block"; // Show "ZALOGUJ"
-    document.querySelector(".user-dropdown li:nth-child(2)").style.display =
-      "block"; // Show "ZAREJESTRUJ"
-    document.querySelector(".user-dropdown li:nth-child(3)").style.display =
-      "none"; // Hide "PROFIL"
-    document.querySelector(".user-dropdown li:nth-child(4)").style.display =
-      "none"; // Hide "WYLOGUJ"
+    // Revert to default icon
+    userIconElement.classList.add("fa-solid", "fa-circle-user");
+    userIconElement.classList.remove("letter");
+    userIconElement.textContent = "";
+
+    document.querySelector(".user-dropdown li:nth-child(1)").style.display = "block";
+    document.querySelector(".user-dropdown li:nth-child(2)").style.display = "block";
+    document.querySelector(".user-dropdown li:nth-child(3)").style.display = "none";
+    document.querySelector(".user-dropdown li:nth-child(4)").style.display = "none";
   }
 }
 
-document
-  .getElementById("login-form")
-  .addEventListener("submit", function (event) {
-    event.preventDefault();
+document.getElementById("login-form").addEventListener("submit", function (event) {
+  event.preventDefault();
 
-    const email = document.getElementById("login-email").value;
-    const password = document.getElementById("login-password").value;
+  const email = document.getElementById("login-email").value;
+  const password = document.getElementById("login-password").value;
 
-    const users = getFromLocalStorage("users") || [];
-    const user = users.find(
-      (user) => user.email === email && user.password === password
-    );
+  const users = getFromLocalStorage("users") || [];
+  const user = users.find(
+    (user) => user.email === email && user.password === password
+  );
   if (user) {
     saveToLocalStorage("loggedInUser", user);
-    alert("Login successful!");
+    showPopupMessage("Zalogowano pomyślnie!");
     checkLoginStatus();
     document.getElementById("login-popup").style.display = "none";
-    updateCartCount()
+    updateCartCount();
   } else {
-    alert("Invalid email or password!");
+    showPopupMessage("Nieprawidłowy email lub hasło!");
   }
 });
 
 document.getElementById("register-form").addEventListener("submit", function (event) {
   event.preventDefault();
 
-    const email = document.getElementById("register-email").value;
-    const password = document.getElementById("register-password").value;
-    const firstName = document.getElementById("register-first-name").value;
-    const lastName = document.getElementById("register-last-name").value;
-    const address = document.getElementById("register-address").value;
-    const city = document.getElementById("register-city").value;
-    const zipcode = document.getElementById("register-zipcode").value;
+  const email = document.getElementById("register-email").value;
+  const password = document.getElementById("register-password").value;
+  const confirmPassword = document.getElementById("register-confirm-password").value;
+  const firstName = document.getElementById("register-first-name").value;
+  const lastName = document.getElementById("register-last-name").value;
+  const address = document.getElementById("register-address").value;
+  const city = document.getElementById("register-city").value;
+  const zipcode = document.getElementById("register-zipcode").value;
 
-    const user = {
-      email,
-      password,
-      firstName,
-      lastName,
-      address,
-      city,
-      zipcode,
-      watchlist: [],
-      cart: [],
-      orderHistory: [],
-    };
+  if (!email || !password || !confirmPassword || !firstName || !lastName || !address || !city || !zipcode) {
+    showPopupMessage("Wypełnij wszystkie pola!");
+    return;
+  }
 
-    let users = getFromLocalStorage("users") || [];
-    users.push(user);
-    saveToLocalStorage("users", users);
+  if (!validateEmail(email)) {
+    showPopupMessage("Podany email jest nieprawidłowy!");
+    return;
+  }
 
-    alert("Registration successful!");
-    document.getElementById("register-popup").style.display = "none";
-    checkLoginStatus();
-  });
+  if (password !== confirmPassword) {
+    showPopupMessage("Podane hasła nie są takie same!");
+    return;
+  }
+
+  if (password.length < 8) {
+    showPopupMessage("Hasło musi składać się z co najmniej 8 znaków.");
+    return;
+  }
+
+  if (zipcode.length !== 5) {
+    showPopupMessage("Kod pocztowy musi składać się z 5 cyfr.");
+    return;
+  }
+
+  const user = {
+    email,
+    password,
+    firstName,
+    lastName,
+    address,
+    city,
+    zipcode,
+    watchlist: [],
+    cart: [],
+    orderHistory: [],
+  };
+
+  let users = getFromLocalStorage("users") || [];
+  users.push(user);
+  saveToLocalStorage("users", users);
+
+  showPopupMessage("Rejestracja udana!");
+  document.getElementById("register-popup").style.display = "none";
+  checkLoginStatus();
+});
 
 document.getElementById("logout").addEventListener("click", function () {
   localStorage.removeItem("loggedInUser");
-  alert("Logout successful!");
-  window.location.href = "index.html";
+  showPopupMessage("Wylogowano pomyślnie!");
+  setTimeout(() => {
+    window.location.href = "index.html";
+  }, 1000);
   checkLoginStatus();
 });
 

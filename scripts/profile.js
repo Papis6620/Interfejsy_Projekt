@@ -61,7 +61,37 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
-  
+
+function showPopupMessage(message) {
+  // Utworzenie elementu popupu
+  const messagePopup = document.createElement("div");
+  messagePopup.className = "message-popup";
+
+  // Zawartość popupu
+  const messageContent = `
+    <div class="message-popup-content">
+      <p>${message}</p>
+      <button class="close-popup">OK</button>
+    </div>
+  `;
+
+  messagePopup.innerHTML = messageContent;
+
+  // Dodanie popupu do dokumentu
+  document.body.appendChild(messagePopup);
+
+  // Dodanie obsługi zamykania popupu
+  messagePopup.querySelector(".close-popup").addEventListener("click", () => {
+    document.body.removeChild(messagePopup);
+  });
+}
+
+function validateEmail(email) {
+  // Wyrażenie regularne sprawdzające poprawność e-maila
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
 function loadOrderHistory() {
   const orderHistoryContent = document.getElementById("order-history-content");
   const loggedInUser = getFromLocalStorage("loggedInUser");
@@ -136,6 +166,18 @@ function loadOrderHistory() {
   
     let users = getFromLocalStorage("users") || [];
     const userIndex = users.findIndex(user => user.email === updatedUser.email);
+
+    if (!updatedUser.address || !updatedUser.city || !updatedUser.zipcode) {
+      showPopupMessage("Wszystkie pola są wymagane.");
+      return;
+    }
+
+    if (updatedUser.zipcode.length !== 5) {
+      showPopupMessage("Kod pocztowy musi składać się z 5 cyfr.");
+      return;
+    }
+
+
     if (userIndex !== -1) {
       users[userIndex] = updatedUser;
       saveToLocalStorage("users", users);
@@ -143,7 +185,7 @@ function loadOrderHistory() {
   
     // Save the updated user to loggedInUser
     saveToLocalStorage("loggedInUser", updatedUser);
-    alert("Zmiany zostały zapisane!");
+    showPopupMessage("Zmiany zostały zapisane!");
   });
 
   function loadAccountSettings() {
@@ -167,6 +209,17 @@ function loadOrderHistory() {
     // Update the user in the users array
     let users = getFromLocalStorage("users") || [];
     const userIndex = users.findIndex(user => user.email === updatedUser.email);
+
+    if (!updatedUser.firstName || !updatedUser.lastName || !updatedUser.password) {
+      showPopupMessage("Wszystkie pola są wymagane.");
+      return;
+    }
+
+    if (updatedUser.password.length < 8) {
+      showPopupMessage("Hasło musi składać się z co najmniej 8 znaków.");
+      return;
+    }
+
     if (userIndex !== -1) {
       users[userIndex] = updatedUser;
       saveToLocalStorage("users", users);

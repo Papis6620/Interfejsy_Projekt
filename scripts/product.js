@@ -181,12 +181,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const loggedInUser = getFromLocalStorage("loggedInUser");
 
       if (!loggedInUser) {
-        alert("Musisz być zalogowany, aby dodać produkt do koszyka.");
+        showPopupMessage("Musisz być zalogowany, aby dodać produkt do koszyka!");
         return;
       }
 
       if (!selectedSize || !selectedColor) {
-        alert("Proszę wybrać rozmiar i kolor.");
+        showPopupMessage("Proszę wybrać rozmiar i kolor!");
         return;
       }
 
@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       saveToLocalStorage("loggedInUser", loggedInUser);
       updateCartCount();
-      alert("Produkt został dodany do koszyka!");
+      showPopupMessage("Produkt został dodany do koszyka!");
       updateUsers(loggedInUser);
     });
   }
@@ -231,8 +231,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const loggedInUser = getFromLocalStorage("loggedInUser");
 
       if (!loggedInUser) {
-        alert(
-          "Musisz być zalogowany, aby dodać/usuwać produkt z listy obserwowanych."
+        showPopupMessage(
+          "Musisz być zalogowany, aby dodać/usuwać produkt z listy obserwowanych!"
         );
         return;
       }
@@ -271,7 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Zmiana stanu przycisku - usunięcie klasy "added"
         addToWatchlistButton.classList.remove("added");
 
-        alert("Produkt został usunięty z listy obserwowanych.");
+        showPopupMessage("Produkt został usunięty z listy obserwowanych!");
       } else {
         // Jeśli produkt nie jest na liście, dodajemy go
         loggedInUser.watchlist.push(productToToggle);
@@ -282,7 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Zmiana stanu przycisku - dodanie klasy "added"
         addToWatchlistButton.classList.add("added");
 
-        alert("Produkt został dodany do listy obserwowanych!");
+        showPopupMessage("Produkt został dodany do listy obserwowanych!");
       }
     });
   }
@@ -325,6 +325,30 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Błąd podczas ładowania danych produktu:", error);
     });
 });
+
+function showPopupMessage(message) {
+  // Utworzenie elementu popupu
+  const messagePopup = document.createElement("div");
+  messagePopup.className = "message-popup";
+
+  // Zawartość popupu
+  const messageContent = `
+    <div class="message-popup-content">
+      <p>${message}</p>
+      <button class="close-popup">OK</button>
+    </div>
+  `;
+
+  messagePopup.innerHTML = messageContent;
+
+  // Dodanie popupu do dokumentu
+  document.body.appendChild(messagePopup);
+
+  // Dodanie obsługi zamykania popupu
+  messagePopup.querySelector(".close-popup").addEventListener("click", () => {
+    document.body.removeChild(messagePopup);
+  });
+}
 
 const thumbnails = document.querySelector(".thumbnails");
 thumbnails.classList.add("at-top");
