@@ -1,6 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
   const buttons = document.querySelectorAll(".profile-btn");
   const sections = document.querySelectorAll(".profile-section");
+  const profileName = document.getElementById("profile-name");
+  const loggedInUser = getFromLocalStorage("loggedInUser");
+
+  if (loggedInUser) {
+    profileName.textContent = `Witaj, ${loggedInUser.firstName}!`;
+  }
 
   buttons.forEach(button => {
     button.addEventListener("click", function () {

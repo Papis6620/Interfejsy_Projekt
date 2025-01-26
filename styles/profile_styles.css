@@ -8,6 +8,7 @@
     background-color: #b6a390;
     padding: 20px;
     box-sizing: border-box;
+    min-width: 200px;
   }
   
   .profile-btn {
@@ -300,3 +301,10 @@ label{
 #empty-text{
   color: black;
 }
+
+#profile-name{
+  font-size: 24px;
+  margin-left: 10px;
+  color: black;
+}
+
