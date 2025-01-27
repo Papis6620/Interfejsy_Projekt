@@ -101,17 +101,24 @@ document.addEventListener("DOMContentLoaded", function () {
       productTile.className = "product-tile";
 
       const productPopup = document.createElement("div");
+      productPopup.addEventListener("mouseover", () => {
+        productPopup.style.visibility = "visible";
+        productPopup.style.opacity = "1";
+      });
+
+      productPopup.addEventListener("mouseout", () => {
+        productPopup.style.visibility = "hidden";
+        productPopup.style.opacity = "0";
+      });
+
+      productPopup.addEventListener("mouseleave", () => {
+        productPopup.style.visibility = "hidden";
+        productPopup.style.opacity = "0";
+      });
       productPopup.className = "product-popup";
-      productPopup.innerHTML = "<p>Extra product details go here!</p>"; // Możesz dodać więcej szczegółów
 
       const productContent = document.createElement("div");
       productContent.className = "product-content";
-
-      // const productImage = document.createElement("img");
-      // // Używamy nowej ścieżki do obrazka z ID produktu
-      // productImage.src = `../img/products/product${product.id}/${product.main_img}`;
-      // productImage.alt = product.name;
-      // productImage.className = "product-image";
 
       // Utworzenie kontenera dla obrazka z gradientem
       const imageContainer = document.createElement("div");
@@ -136,23 +143,6 @@ document.addEventListener("DOMContentLoaded", function () {
       const productPrice = document.createElement("p");
       productPrice.className = "product-price";
       productPrice.textContent = `${product.price} zł`;
-
-      // Kolor
-      // const productColor = document.createElement("div");
-      // productColor.className = "product-color";
-      // const colorLabel = document.createElement("label");
-      // colorLabel.textContent = "Kolory:";
-      // productColor.appendChild(colorLabel);
-
-      // const colorOptions = document.createElement("div");
-      // colorOptions.className = "color-options";
-      // product.available_colors.forEach((color) => {
-      //   const colorOption = document.createElement("span");
-      //   colorOption.className = "color-option";
-      //   colorOption.style.backgroundColor = color;
-      //   colorOptions.appendChild(colorOption);
-      // });
-      // productColor.appendChild(colorOptions);
 
       function createProductColors(MAX_NUM) {
         const productColor = document.createElement("div");
@@ -185,9 +175,27 @@ document.addEventListener("DOMContentLoaded", function () {
               const moreColors = document.createElement("span");
               moreColors.className = "color-option-more-colors";
               moreColors.textContent = `+${remainingColorsCount}`;
+              moreColors.addEventListener("mouseover", () => {
+                productPopup.style.visibility = "visible";
+                productPopup.style.opacity = "1";
+              });
+
+              moreColors.addEventListener("mouseout", () => {
+                productPopup.style.visibility = "hidden";
+                productPopup.style.opacity = "0";
+              });
+
+              moreColors.addEventListener("mouseleave", () => {
+                productPopup.style.visibility = "hidden";
+                productPopup.style.opacity = "0";
+              });
               colorOptions.appendChild(moreColors);
             }
           }
+          const colorOption = document.createElement("span");
+          colorOption.className = "color-option";
+          colorOption.style.backgroundColor = color;
+          productPopup.appendChild(colorOption);
         });
 
         productColor.appendChild(colorOptions);

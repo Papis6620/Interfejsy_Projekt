@@ -181,27 +181,29 @@ main {
 }
 
 .product-tile .product-popup {
-  display: none; /* jak bedziesz odkomentowywal to wywal to */
-  /* visibility: hidden;
+  visibility: hidden;
   box-sizing: border-box;
   position: fixed;
-  width: 300%;
-  height: 220%;
-  scale: 0.75;
-  background-color: rgba(255, 255, 0, 1);
+  bottom: -0.1%;
+  width: 100%;
+  scale: 0.95;
+  background-color: #f9f9f9;
   opacity: 0;
-  transition: opacity 0.8s ease; */
+  border: 2px solid #333;
+  border-radius: 15px;
+  transition: opacity 0.8s ease;
+
+  padding: 15px; /* Przestrzeń wewnątrz popupu */
+  display: flex;
+  flex-wrap: wrap; /* Zezwala na zawijanie elementów do nowej linii */
+  gap: 5px; /* Zmniejsza odstęp między elementami */
 }
 
-/* .last-product-in-row .product-popup {
-  transform: translate(-60%, 0);
-} */
-
 /* Wyświetlanie popupu po najechaniu na kafelek */
-/* .product-tile:hover .product-popup {
+.color-option-more-colors:hover ~ product-popup {
   visibility: visible;
   opacity: 1;
-} */
+}
 
 /* Stopka */
 #footer-container {
