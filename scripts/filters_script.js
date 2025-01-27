@@ -170,7 +170,24 @@ function constructSearchURL() {
   const selectedCheckboxes = Array.from(
     document.querySelectorAll(".filter-checkbox:checked")
   );
-  const sizeList = ["S", "M", "L", "XL", "XXL"]; // Add all valid sizes here
+  const sizeList = [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL",
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+  ]; // Add all valid sizes here
 
   const selectedColors = [];
   const selectedSizes = [];
