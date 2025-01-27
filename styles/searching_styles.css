@@ -81,11 +81,51 @@ main {
   transform: translateY(-5px);
 }
 
-/* Styl dla obrazka produktu */
+.product-tile {
+  position: relative;
+  color: #333;
+  box-sizing: border-box;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 250px; /* Możesz dostosować wysokość */
+  overflow: hidden; /* Zapobiega wychodzeniu obrazka poza kontener */
+  transition: all 0.3s ease;
+}
+
 .product-image {
-  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+}
+
+.image-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 250px;
-  transition: transform 0.3s ease; /* Umożliwia płynne powiększenie obrazka */
+  box-shadow: inset 0 0 60px rgba(255, 255, 255, 1);
+  z-index: 1; /* Umieszczamy gradient nad obrazkiem */
+}
+
+.product-image {
+  z-index: 0; /* Obrazek ma być pod gradientem */
+}
+
+.image-container:hover {
+  transform: scale(1.1);
 }
 
 .product-info {
@@ -95,15 +135,16 @@ main {
 .product-name {
   font-size: 18px;
   font-weight: bold;
-  margin: 10px 0;
+  margin: 5px 0;
   color: #333;
 }
 
 .product-price {
-  font-size: 16px;
+  font-weight: bold;
+  font-size: 25px;
   color: #e60000;
+  margin: 10px 0;
 }
-*/
 
 /* Wybór koloru - kwadraciki */
 .product-color {
