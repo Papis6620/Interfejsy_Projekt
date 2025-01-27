@@ -170,7 +170,7 @@
 }
 
 /* Stylowanie przycisku */
-button {
+.sidebar button {
   margin-bottom: 10px;
   background-color: #c6c6c6;
   color: #3a3a3a;
@@ -185,6 +185,6 @@ button {
   transition: 0.3s ease;
 }
 
-button:hover {
+.sidebar button:hover {
   background-color: #a9a9a9;
 }

@@ -5,7 +5,31 @@ document.addEventListener("DOMContentLoaded", function () {
       checkoutButton.addEventListener("click", proceedToCheckout);
     }
   });
+
+  function showPopupMessage(message) {
+    // Utworzenie elementu popupu
+    const messagePopup = document.createElement("div");
+    messagePopup.className = "message-popup";
   
+    // Zawartość popupu
+    const messageContent = `
+      <div class="message-popup-content">
+        <p>${message}</p>
+        <button class="close-popup">OK</button>
+      </div>
+    `;
+  
+    messagePopup.innerHTML = messageContent;
+  
+    // Dodanie popupu do dokumentu
+    document.body.appendChild(messagePopup);
+  
+    // Dodanie obsługi zamykania popupu
+    messagePopup.querySelector(".close-popup").addEventListener("click", () => {
+      document.body.removeChild(messagePopup);
+    });
+  }
+
   function loadCart() {
     const cartItemsContainer = document.getElementById("cart-items");
     const cartTotalContainer = document.getElementById("cart-total");
@@ -62,10 +86,10 @@ document.addEventListener("DOMContentLoaded", function () {
         button.addEventListener("click", removeItem);
       });
     } else {
-      cartItemsContainer.innerHTML = "<p>Twój koszyk jest pusty.</p>";
+      cartItemsContainer.innerHTML = `<p id="cart-text">Twój koszyk jest pusty.</p>`;
       cartTotalContainer.innerHTML = "";
       checkoutButton.style.display = "none";
-      cartSummary.innerHTML = "<p>Dodaj produkty do koszyka, aby kontynuować zakupy.</p>";
+      cartSummary.innerHTML = `<p id="cart-text">Dodaj produkty do koszyka, aby kontynuować zakupy.</p>`;
       
     }
   }
@@ -90,9 +114,12 @@ document.addEventListener("DOMContentLoaded", function () {
       loadCart();
       updateCartCount();
   
-      alert("Dziękujemy za zakupy!");
+      showPopupMessage("Dziękujemy za zakupy!");
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 2000);
     } else {
-      alert("Twój koszyk jest pusty.");
+      showPopupMessage("Twój koszyk jest pusty.");
     }
   }
 

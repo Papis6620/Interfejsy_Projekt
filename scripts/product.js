@@ -29,9 +29,74 @@ document.addEventListener("DOMContentLoaded", () => {
         return [];
       });
   }
+  function populateSizeOptions(product) {
+    const sizeOptionsDiv = document.getElementById("size-options");
+
+    if (!sizeOptionsDiv) {
+      console.error("Element with id 'size-options' not found.");
+      return;
+    }
+
+    // Tablice z rozmiarami
+    const colth_sizes = ["XS", "S", "M", "L", "XL", "XXL"];
+    const shoe_sizes = [
+      "36",
+      "37",
+      "38",
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44",
+      "45",
+      "46",
+    ];
+    const shoe_sizes_children = ["36", "37", "38", "39", "40"];
+
+    let sizes = [];
+
+    if (product.tags.includes("BUTY_TAG_DO_ROZMIAROW")) {
+      sizes = shoe_sizes;
+    } else if (product.tags.includes("BUTY_TAG_DO_ROZMIAROW_DZIECI")) {
+      sizes = shoe_sizes_children;
+    } else {
+      sizes = colth_sizes;
+    }
+
+    // Czyszczenie poprzednich opcji
+    sizeOptionsDiv.innerHTML = "";
+
+    // Dodanie opcji i zdarzeń kliknięcia
+    sizes.forEach((size) => {
+      const span = document.createElement("span");
+      span.className = "size unavailable"; // Możesz zmienić na 'available' w zależności od logiki
+      span.textContent = size;
+
+      // Dodanie zdarzenia kliknięcia do każdego elementu
+      span.addEventListener("click", () => {
+        if (span.classList.contains("available")) {
+          // Usuń 'selected' z innych elementów
+          sizeOptionsDiv
+            .querySelectorAll(".size")
+            .forEach((s) => s.classList.remove("selected"));
+
+          // Dodaj 'selected' do klikniętego elementu
+          span.classList.add("selected");
+
+          // Aktualizacja wybranego rozmiaru
+          selectedSize = span.textContent.trim();
+          console.log("Wybrany rozmiar:", selectedSize);
+        }
+      });
+
+      sizeOptionsDiv.appendChild(span);
+    });
+  }
 
   // Funkcja do wyświetlania produktu na stronie
   function displayProduct(product) {
+    populateSizeOptions(product);
     // Zmieniamy tytuł strony na nazwę produktu
     document.getElementById("page-title").textContent = product.name;
 
@@ -146,19 +211,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Funkcja zaznaczania rozmiaru
-  function handleSizeSelection() {
-    sizeElements.forEach((size) => {
-      size.addEventListener("click", () => {
-        if (size.classList.contains("available")) {
-          sizeElements.forEach((s) => s.classList.remove("selected"));
-          size.classList.add("selected");
-          selectedSize = size.textContent.trim();
-        }
-      });
-    });
-  }
-
   // Funkcja zmniejszania ilości
   function handleQuantityChange() {
     quantityMinus.addEventListener("click", () => {
@@ -181,7 +233,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const loggedInUser = getFromLocalStorage("loggedInUser");
 
       if (!loggedInUser) {
-        showPopupMessage("Musisz być zalogowany, aby dodać produkt do koszyka!");
+        showPopupMessage(
+          "Musisz być zalogowany, aby dodać produkt do koszyka!"
+        );
         return;
       }
 
@@ -271,7 +325,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // Zmiana stanu przycisku - usunięcie klasy "added"
         addToWatchlistButton.classList.remove("added");
 
-        showPopupMessage("Produkt został usunięty z listy obserwowanych!");
       } else {
         // Jeśli produkt nie jest na liście, dodajemy go
         loggedInUser.watchlist.push(productToToggle);
@@ -282,7 +335,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // Zmiana stanu przycisku - dodanie klasy "added"
         addToWatchlistButton.classList.add("added");
 
-        showPopupMessage("Produkt został dodany do listy obserwowanych!");
       }
     });
   }
@@ -312,7 +364,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const product = products.find((p) => p.id == productID);
       if (product) {
         displayProduct(product);
-        handleSizeSelection();
         handleQuantityChange();
         handleAddToCart();
         handleAddToWatchlist();

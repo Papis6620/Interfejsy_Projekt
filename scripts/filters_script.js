@@ -8,7 +8,9 @@ const minValueDisplay = document.getElementById("min-value");
 const maxValueDisplay = document.getElementById("max-value");
 const clearFiltersBtn = document.getElementById("clear-filters-btn");
 const applyFiltersBtn = document.querySelector(".apply-btn"); // Button for applying filters
-const dynamicCategoryContent = document.getElementById("dynamic-category-content");
+const dynamicCategoryContent = document.getElementById(
+  "dynamic-category-content"
+);
 
 // Variables to store category data (loaded dynamically)
 let categoryData = {};
@@ -101,6 +103,40 @@ loadCategoryData().then(() => {
   });
 });
 
+// Funkcja dodająca labele do istniejącego diva
+function addLabelsToDivFromMap(divId, colorMap) {
+  // Pobranie istniejącego diva
+  const targetDiv = document.getElementById(divId);
+
+  if (!targetDiv) {
+    console.error(`Nie znaleziono elementu o id "${divId}"`);
+    return;
+  }
+
+  // Iteracja przez mapę i dodawanie checkboxów
+  Object.entries(colorMap).forEach(([labelText, colorValue]) => {
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.className = "filter-checkbox";
+    input.value = colorValue; // Ustawienie wartości jako kod koloru (np. "red")
+    label.appendChild(input);
+    label.append(` ${labelText}`);
+    targetDiv.appendChild(label);
+  });
+}
+const colorMap = {
+  Czerwony: "red",
+  Niebieski: "blue",
+  Czarny: "black",
+  Biały: "white",
+  Zielony: "green",
+  Żółty: "yellow",
+  Różowy: "pink",
+};
+
+addLabelsToDivFromMap("filter-section-colors", colorMap);
+
 // Construct the search URL by appending to the current query
 function constructSearchURL() {
   const params = new URLSearchParams(window.location.search);
@@ -113,7 +149,9 @@ function constructSearchURL() {
   params.set("priceMax", priceMax.value);
 
   // Add or update selected category in the parameters
-  const selectedCategory = document.querySelector('input[name="category"]:checked');
+  const selectedCategory = document.querySelector(
+    'input[name="category"]:checked'
+  );
   if (selectedCategory && selectedCategory.value !== "none") {
     params.set("category", selectedCategory.value);
   } else {
@@ -129,14 +167,27 @@ function constructSearchURL() {
   }
 
   // Separate colors, sizes, and general filters
-  const selectedCheckboxes = Array.from(document.querySelectorAll(".filter-checkbox:checked"));
-  const colorMap = {
-    "Czerwony": "red",
-    "Niebieski": "blue",
-    "Czarny": "black",
-    "Biały": "white",
-  };
-  const sizeList = ["S", "M", "L", "XL", "XXL"]; // Add all valid sizes here
+  const selectedCheckboxes = Array.from(
+    document.querySelectorAll(".filter-checkbox:checked")
+  );
+  const sizeList = [
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL",
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+  ]; // Add all valid sizes here
 
   const selectedColors = [];
   const selectedSizes = [];

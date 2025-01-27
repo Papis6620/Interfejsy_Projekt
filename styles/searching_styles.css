@@ -24,7 +24,7 @@ body {
   position: fixed;
   top: 80px; /* Odległość od góry, uwzględniając nagłówek */
   left: 0;
-  z-index: 999; /* Menu ma mniejszy priorytet niż nagłówek */
+  z-index: 99; /* Menu ma mniejszy priorytet niż nagłówek */
   overflow-y: auto; /* Pozwala przewijać zawartość menu */
 }
 
@@ -81,11 +81,51 @@ main {
   transform: translateY(-5px);
 }
 
-/* Styl dla obrazka produktu */
+.product-tile {
+  position: relative;
+  color: #333;
+  box-sizing: border-box;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 250px; /* Możesz dostosować wysokość */
+  overflow: hidden; /* Zapobiega wychodzeniu obrazka poza kontener */
+  transition: all 0.3s ease;
+}
+
 .product-image {
-  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+}
+
+.image-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 250px;
-  transition: transform 0.3s ease; /* Umożliwia płynne powiększenie obrazka */
+  box-shadow: inset 0 0 60px rgba(255, 255, 255, 1);
+  z-index: 1; /* Umieszczamy gradient nad obrazkiem */
+}
+
+.product-image {
+  z-index: 0; /* Obrazek ma być pod gradientem */
+}
+
+.image-container:hover {
+  transform: scale(1.1);
 }
 
 .product-info {
@@ -95,15 +135,16 @@ main {
 .product-name {
   font-size: 18px;
   font-weight: bold;
-  margin: 10px 0;
+  margin: 5px 0;
   color: #333;
 }
 
 .product-price {
-  font-size: 16px;
+  font-weight: bold;
+  font-size: 25px;
   color: #e60000;
+  margin: 10px 0;
 }
-*/
 
 /* Wybór koloru - kwadraciki */
 .product-color {
@@ -116,8 +157,19 @@ main {
 
 .color-options {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   margin-top: 5px;
+}
+
+.color-option-more-colors {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
 }
 
 .color-option {
@@ -129,31 +181,33 @@ main {
 }
 
 .product-tile .product-popup {
-  display: none; /* jak bedziesz odkomentowywal to wywal to */
-  /* visibility: hidden;
+  visibility: hidden;
   box-sizing: border-box;
   position: fixed;
-  width: 300%;
-  height: 220%;
-  scale: 0.75;
-  background-color: rgba(255, 255, 0, 1);
+  bottom: -0.1%;
+  width: 100%;
+  scale: 0.95;
+  background-color: #f9f9f9;
   opacity: 0;
-  transition: opacity 0.8s ease; */
+  border: 2px solid #333;
+  border-radius: 15px;
+  transition: opacity 0.8s ease;
+
+  padding: 15px; /* Przestrzeń wewnątrz popupu */
+  display: flex;
+  flex-wrap: wrap; /* Zezwala na zawijanie elementów do nowej linii */
+  gap: 5px; /* Zmniejsza odstęp między elementami */
 }
 
-/* .last-product-in-row .product-popup {
-  transform: translate(-60%, 0);
-} */
-
 /* Wyświetlanie popupu po najechaniu na kafelek */
-/* .product-tile:hover .product-popup {
+.color-option-more-colors:hover ~ product-popup {
   visibility: visible;
   opacity: 1;
-} */
+}
 
 /* Stopka */
 #footer-container {
-  z-index: 1000;
+  z-index: 100;
 }
 
 a {
