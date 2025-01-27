@@ -5,7 +5,15 @@
     "name": "Koszulka Basic",
     "price": 19.99,
     "main_img": "product1.png",
-    "available_colors": ["black", "red", "blue", "pink", "white"],
+    "available_colors": [
+      "black",
+      "red",
+      "blue",
+      "pink",
+      "white",
+      "green",
+      "yellow"
+    ],
     "available_sizes": ["S", "XL", "XXL"],
     "categories": ["ona", "on"],
     "tags": ["Koszulki", "Bluzki"],

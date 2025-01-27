@@ -138,21 +138,63 @@ document.addEventListener("DOMContentLoaded", function () {
       productPrice.textContent = `${product.price} zł`;
 
       // Kolor
-      const productColor = document.createElement("div");
-      productColor.className = "product-color";
-      const colorLabel = document.createElement("label");
-      colorLabel.textContent = "Kolory:";
-      productColor.appendChild(colorLabel);
+      // const productColor = document.createElement("div");
+      // productColor.className = "product-color";
+      // const colorLabel = document.createElement("label");
+      // colorLabel.textContent = "Kolory:";
+      // productColor.appendChild(colorLabel);
 
-      const colorOptions = document.createElement("div");
-      colorOptions.className = "color-options";
-      product.available_colors.forEach((color) => {
-        const colorOption = document.createElement("span");
-        colorOption.className = "color-option";
-        colorOption.style.backgroundColor = color;
-        colorOptions.appendChild(colorOption);
-      });
-      productColor.appendChild(colorOptions);
+      // const colorOptions = document.createElement("div");
+      // colorOptions.className = "color-options";
+      // product.available_colors.forEach((color) => {
+      //   const colorOption = document.createElement("span");
+      //   colorOption.className = "color-option";
+      //   colorOption.style.backgroundColor = color;
+      //   colorOptions.appendChild(colorOption);
+      // });
+      // productColor.appendChild(colorOptions);
+
+      function createProductColors(MAX_NUM) {
+        const productColor = document.createElement("div");
+        productColor.className = "product-color";
+
+        const colorLabel = document.createElement("label");
+        colorLabel.textContent = "Kolory:";
+        productColor.appendChild(colorLabel);
+
+        const colorOptions = document.createElement("div");
+        colorOptions.className = "color-options";
+
+        iteration_limit = MAX_NUM;
+        if (product.available_colors.length > MAX_NUM) {
+          iteration_limit = MAX_NUM - 1;
+        }
+        // Iteracja przez wszystkie kolory, ale ograniczona do MAX_NUM
+        product.available_colors.forEach((color, index) => {
+          if (index < iteration_limit) {
+            // Dodaj normalne kolory, jeśli mieszczą się w limicie
+            const colorOption = document.createElement("span");
+            colorOption.className = "color-option";
+            colorOption.style.backgroundColor = color;
+            colorOptions.appendChild(colorOption);
+          } else if (index === MAX_NUM - 1) {
+            // Dodaj +N, jeśli to ostatni element
+            const remainingColorsCount =
+              product.available_colors.length - (MAX_NUM - 1);
+            if (remainingColorsCount > 0) {
+              const moreColors = document.createElement("span");
+              moreColors.className = "color-option-more-colors";
+              moreColors.textContent = `+${remainingColorsCount}`;
+              colorOptions.appendChild(moreColors);
+            }
+          }
+        });
+
+        productColor.appendChild(colorOptions);
+        return productColor;
+      }
+      const MAX_NUM = 6;
+      productColor = createProductColors(MAX_NUM);
 
       // Dodanie wszystkich elementów do kafelka
       productInfo.appendChild(productName);
