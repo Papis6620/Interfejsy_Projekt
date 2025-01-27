@@ -117,6 +117,38 @@ document.addEventListener("DOMContentLoaded", function () {
   updateCartCount()
 });
 
+function loadSearch() {
+  // Get the URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+
+  // Get the value of 'q' from the URL parameters
+  const query = urlParams.get("q");
+
+  // Get the search input element
+  const searchInput = document.getElementById("search-input");
+
+  // If a query exists and is not empty after trimming, set it in the search input field
+  if (query && query.trim() !== "") {
+    searchInput.value = decodeURIComponent(query.trim());
+  } else {
+    // Clear the input field to ensure the placeholder is displayed
+    searchInput.value = "";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Get the URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+
+  // Get the value of 'q' from the URL parameters
+  const query = urlParams.get("q");
+
+  // If a query exists, set it in the search input field
+  if (query) {
+    document.getElementById("search-input").value = decodeURIComponent(query);
+  }
+});
+
 // Funkcja do obsługi wyszukiwania
 document.getElementById("search-button").addEventListener("click", function () {
   const searchInput = document.getElementById("search-input").value.trim();
@@ -420,3 +452,5 @@ loadCategoryData().then((categoryData) => {
     console.log("Błąd w ładowaniu lub przekształcaniu danych");
   }
 });
+
+loadSearch();
