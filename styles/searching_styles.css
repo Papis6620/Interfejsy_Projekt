@@ -24,7 +24,7 @@ body {
   position: fixed;
   top: 80px; /* Odległość od góry, uwzględniając nagłówek */
   left: 0;
-  z-index: 999; /* Menu ma mniejszy priorytet niż nagłówek */
+  z-index: 99; /* Menu ma mniejszy priorytet niż nagłówek */
   overflow-y: auto; /* Pozwala przewijać zawartość menu */
 }
 
