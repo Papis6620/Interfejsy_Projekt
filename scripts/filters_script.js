@@ -29,12 +29,18 @@ clearFiltersBtn.addEventListener("click", function () {
   const params = new URLSearchParams(window.location.search);
   const query = params.get("q");
 
-  // Redirect to the `searching.html` page with only the `q` parameter
-  if (query) {
-    window.location.href = `searching.html?q=${query}`;
+  // Check if `query` is null, empty, or only contains whitespace
+  let newURL = "searching.html";
+  if (query && query.trim()) {
+    // If `q` has non-whitespace characters, preserve it
+    newURL += `?q=${encodeURIComponent(query)}`;
   } else {
-    window.location.href = "searching.html"; // Fallback if `q` is missing
+    // Otherwise, set `q` to `%20`
+    newURL += "?q=%20";
   }
+  
+  // Redirect to the updated URL
+  window.location.href = newURL;
 });
 
 // Update price values dynamically
@@ -232,7 +238,7 @@ function constructSearchURL() {
 
   // If `q` parameter doesn't exist, remove it from the URL
   if (!query) {
-    newURL = `searching.html?${params.toString().replace(/&?q=[^&]*/, "")}`; // Remove `q` if it doesn't exist
+    newURL = `searching.html?${params.toString().replace(/&?q=[^&]*/, "q=%20")}`; // Remove `q` if it doesn't exist
   }
 
   // Redirect to the new URL
@@ -241,3 +247,107 @@ function constructSearchURL() {
 
 // Add event listener to the "Apply Filters" button
 applyFiltersBtn.addEventListener("click", constructSearchURL);
+
+function initializeFiltersFromURL() {
+  const params = new URLSearchParams(window.location.search);
+
+  const priceMinValue = params.get("priceMin");
+  const priceMaxValue = params.get("priceMax");
+
+  if (priceMinValue) {
+    priceMin.value = priceMinValue;
+    minValueDisplay.textContent = `${priceMinValue} zł`;
+  }
+
+  if (priceMaxValue) {
+    priceMax.value = priceMaxValue;
+    maxValueDisplay.textContent = `${priceMaxValue} zł`;
+  }
+
+  const categoryValue = params.get("category");
+  const filtersValue = params.get("filters");
+
+  if (categoryValue) {
+    // Load category data and wait for it to resolve
+    loadCategoryData().then(() => {
+      console.log("Category data loaded!");
+      const categoryRadio = document.querySelector(
+        `input[name="category"][value="${categoryValue}"]`
+      );
+
+      if (categoryRadio) {
+        categoryRadio.checked = true;
+
+        // Uncollapse the "Kategorie" section
+        const categorySection = document.querySelector(".filter-section");
+        if (categorySection.classList.contains("collapsed")) {
+          categorySection.classList.remove("collapsed");
+        }
+
+        // Handle dynamic content only if filters exist in the URL
+        if (filtersValue) {
+          if (categoryValue !== "none") {
+            generateCategoryContent(categoryValue);
+
+            // Initialize the filters from the URL
+            const selectedFilters = filtersValue.split(",");
+            selectedFilters.forEach((filter) => {
+              const filterCheckbox = Array.from(
+                document.querySelectorAll(".filter-checkbox")
+              ).find(
+                (checkbox) =>
+                  checkbox.nextSibling.textContent.trim() === filter
+              );
+
+              if (filterCheckbox) filterCheckbox.checked = true;
+            });
+          }
+        } else if (categoryValue !== "none") {
+          // If no filters but category is provided, clear dynamic content
+          dynamicCategoryContent.innerHTML = "";
+        }
+      }
+    });
+  }
+
+  const sortValue = params.get("sort");
+  if (sortValue) {
+    const sortRadio = document.querySelector(
+      `input[name="sort"][id="${sortValue}"]`
+    );
+    if (sortRadio) sortRadio.checked = true;
+  }
+
+  const colorsValue = params.get("colors");
+  if (colorsValue) {
+    const selectedColors = colorsValue.split(",");
+    selectedColors.forEach((color) => {
+      const colorCheckbox = Array.from(
+        document.querySelectorAll(".filter-checkbox")
+      ).find((checkbox) => checkbox.value === color);
+
+      if (colorCheckbox) colorCheckbox.checked = true;
+    });
+  }
+
+  const sizesValue = params.get("sizes");
+  if (sizesValue) {
+    const selectedSizes = sizesValue.split(",");
+    selectedSizes.forEach((size) => {
+      const sizeCheckbox = Array.from(
+        document.querySelectorAll(".filter-checkbox")
+      ).find(
+        (checkbox) =>
+          checkbox.name === "size" &&
+          checkbox.nextSibling.textContent.trim() === size
+      );
+
+      if (sizeCheckbox) sizeCheckbox.checked = true;
+    });
+  }
+
+  updatePriceValues();
+}
+
+// Call the function when the page loads
+initializeFiltersFromURL();
