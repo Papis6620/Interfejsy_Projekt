@@ -1,6 +1,5 @@
 /* Resetowanie marginesów i paddingu */
 
-
 /* Stylizowanie body */
 body {
   font-family: "Arial", sans-serif;
@@ -51,7 +50,7 @@ section p {
 }
 
 /* Formularz */
-form {
+.help form {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -117,7 +116,7 @@ form {
 
 /* Stopka */
 #footer-container {
-  z-index: 1000;
+  z-index: 100;
 }
 
 /* Wyrównanie tekstu na stronie */
