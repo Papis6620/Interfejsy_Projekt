@@ -177,6 +177,7 @@ function constructSearchURL() {
     document.querySelectorAll(".filter-checkbox:checked")
   );
   const sizeList = [
+    "XS",
     "S",
     "M",
     "L",
@@ -284,12 +285,15 @@ function initializeFiltersFromURL() {
           categorySection.classList.remove("collapsed");
         }
 
-        // Handle dynamic content only if filters exist in the URL
-        if (filtersValue) {
-          if (categoryValue !== "none") {
-            generateCategoryContent(categoryValue);
+        if (categoryValue !== "none")
+        {
+          generateCategoryContent(categoryValue);
+        }
 
-            // Initialize the filters from the URL
+        if (filtersValue)
+        {
+          if (categoryValue !== "none")
+          {
             const selectedFilters = filtersValue.split(",");
             selectedFilters.forEach((filter) => {
               const filterCheckbox = Array.from(
@@ -302,9 +306,6 @@ function initializeFiltersFromURL() {
               if (filterCheckbox) filterCheckbox.checked = true;
             });
           }
-        } else if (categoryValue !== "none") {
-          // If no filters but category is provided, clear dynamic content
-          dynamicCategoryContent.innerHTML = "";
         }
       }
     });
@@ -319,7 +320,9 @@ function initializeFiltersFromURL() {
   }
 
   const colorsValue = params.get("colors");
-  if (colorsValue) {
+  
+  if (colorsValue)
+  {
     const selectedColors = colorsValue.split(",");
     selectedColors.forEach((color) => {
       const colorCheckbox = Array.from(
@@ -330,8 +333,17 @@ function initializeFiltersFromURL() {
     });
   }
 
+  if (colorsValue)
+  {
+    const colorSection = document.querySelector("#color-unroll");
+    if (colorSection.classList.contains("collapsed")) {
+      colorSection.classList.remove("collapsed");
+    }
+  }
+
   const sizesValue = params.get("sizes");
-  if (sizesValue) {
+  if (sizesValue)
+    {
     const selectedSizes = sizesValue.split(",");
     selectedSizes.forEach((size) => {
       const sizeCheckbox = Array.from(
@@ -344,6 +356,15 @@ function initializeFiltersFromURL() {
 
       if (sizeCheckbox) sizeCheckbox.checked = true;
     });
+  }
+
+  if (sizesValue)
+  {
+    const sizeSection = document.querySelector("#size-unroll");
+    if (sizeSection.classList.contains("collapsed"))
+    {
+      sizeSection.classList.remove("collapsed");
+    }
   }
 
   updatePriceValues();
